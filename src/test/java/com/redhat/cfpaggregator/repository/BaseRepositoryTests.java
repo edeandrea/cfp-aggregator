@@ -9,6 +9,7 @@ import jakarta.inject.Inject;
 import com.redhat.cfpaggregator.config.CfpPortalsConfig.PortalType;
 import com.redhat.cfpaggregator.domain.Event;
 import com.redhat.cfpaggregator.domain.Speaker;
+import com.redhat.cfpaggregator.domain.Talk;
 
 abstract class BaseRepositoryTests {
   protected static final TimeZone TIMEZONE = TimeZone.getDefault();
@@ -25,6 +26,8 @@ abstract class BaseRepositoryTests {
   protected static final Speaker SPEAKER = Speaker.builder()
       .bio("""
             This is my bio!
+            
+            I hope you like it!
             """)
       .blueskyUsername("ericdeandrea.dev")
       .twitterHandle("@edeandrea")
@@ -35,14 +38,28 @@ abstract class BaseRepositoryTests {
       .countryName("USA")
       .build();
 
+  protected static final Talk TALK = Talk.builder()
+      .title("Some talk title")
+      .description("Some fun talk")
+      .videoUrl("https://www.youtube.com")
+      .build();
+
   @Inject
   EventRepository eventRepository;
 
   @Inject
   SpeakerRepository speakerRepository;
 
-  protected Event createEvent() {
+  @Inject
+  TalkRepository talkRepository;
+
+  protected Event createEvent(boolean withSpeaker) {
     var event = EVENT.cloneAsNew();
+
+    if (withSpeaker) {
+      event.addSpeakers(SPEAKER.cloneAsNew());
+    }
+
     this.eventRepository.persist(event);
 
     return event;

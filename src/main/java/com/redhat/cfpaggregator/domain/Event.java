@@ -22,12 +22,18 @@ import jakarta.validation.constraints.NotNull;
 
 import com.redhat.cfpaggregator.config.CfpPortalsConfig.PortalType;
 
+/**
+ * Represents an event entity with associated information such as name, description,
+ * URLs, date range, time zone, portal type, and related speakers.
+ *
+ * @author Eric Deandrea
+ */
 @Entity
 @Table(name = "events")
 public class Event {
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "speaker_seq")
-  @SequenceGenerator(name = "speaker_seq", sequenceName = "speaker_seq", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_seq")
+  @SequenceGenerator(name = "event_seq", sequenceName = "event_seq", allocationSize = 1)
   private Long id;
   
   @NotEmpty(message = "name can not be null or empty")
@@ -202,23 +208,19 @@ public class Event {
         '}';
   }
 
-  public void addSpeaker(Speaker speaker) {
-    if (speaker != null) {
-      this.speakers.add(speaker);
-      speaker.setEvent(this);
-    }
-  }
-
   public void addSpeakers(Speaker... speakers) {
     if (speakers != null) {
       Arrays.stream(speakers)
           .filter(Objects::nonNull)
-          .forEach(this::addSpeaker);
+          .forEach(speaker -> {
+            this.speakers.add(speaker);
+            speaker.setEvent(this);
+          });
     }
   }
 
   public List<Speaker> getSpeakers() {
-    return speakers;
+    return this.speakers;
   }
 
   public void setSpeakers(List<Speaker> speakers) {
@@ -317,10 +319,10 @@ public class Event {
     }
 
     public Builder speakers(List<Speaker> speakers) {
-      this.speakers = speakers;
+      this.speakers.clear();
 
-      if (this.speakers == null) {
-        this.speakers = new ArrayList<>();
+      if (speakers != null) {
+        this.speakers.addAll(speakers);
       }
 
       return this;

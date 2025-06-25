@@ -1,7 +1,11 @@
 package com.redhat.cfpaggregator.domain;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,6 +13,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -49,6 +55,17 @@ public class Speaker {
   @JoinColumn(nullable = false)
   private Event event;
 
+  @ManyToMany(
+      cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+      fetch = FetchType.LAZY
+  )
+  @JoinTable(
+      name = "speaker_talks",
+      joinColumns = @JoinColumn(name = "speaker_id"),
+      inverseJoinColumns = @JoinColumn(name = "talk_id")
+  )
+  private List<Talk> talks = new ArrayList<>();
+
   // Default constructor for JPA
   public Speaker() {
   }
@@ -68,7 +85,12 @@ public class Speaker {
     this.event = builder.event;
 
     if (this.event != null) {
-      this.event.addSpeaker(this);
+      this.event.addSpeakers(this);
+    }
+
+    if (builder.talks != null) {
+      this.talks.addAll(builder.talks);
+      this.talks.forEach(talk -> talk.addSpeakers(this));
     }
   }
 
@@ -88,6 +110,15 @@ public class Speaker {
     return toBuilder()
         .id(null)
         .event(event)
+        .talks()
+        .build();
+  }
+
+  public Speaker cloneAsNewWithNewTalks(Talk... talks) {
+    return toBuilder()
+        .id(null)
+        .event(null)
+        .talks(talks)
         .build();
   }
 
@@ -116,6 +147,7 @@ public class Speaker {
         ", countryName='" + countryName + '\'' +
         ", bio='" + bio + '\'' +
         ", eventId=" + event.getId() +
+        ", talks=" + talks +
         '}';
   }
 
@@ -207,6 +239,21 @@ public class Speaker {
     this.event = event;
   }
 
+  public void addTalks(Talk... talks) {
+    if (talks != null) {
+      Arrays.stream(talks)
+          .filter(Objects::nonNull)
+          .forEach(talk -> {
+            this.talks.add(talk);
+            talk.addSpeakers(this);
+          });
+    }
+  }
+
+  public List<Talk> getTalks() {
+    return this.talks;
+  }
+
   public static final class Builder {
     private Long id;
     private String firstName;
@@ -219,6 +266,7 @@ public class Speaker {
     private String countryName;
     private String bio;
     private Event event;
+    private List<Talk> talks = new ArrayList<>();
 
     public Builder() {
     }
@@ -289,6 +337,28 @@ public class Speaker {
 
     public Builder event(Event event) {
       this.event = event;
+      return this;
+    }
+
+    public Builder talks(List<Talk> talks) {
+      this.talks.clear();
+
+      if (talks != null) {
+        this.talks.addAll(talks);
+      }
+
+      return this;
+    }
+
+    public Builder talks(Talk... talks) {
+      return (talks != null) ? talks(List.of(talks)) : this;
+    }
+
+    public Builder addTalk(Talk talk) {
+      if (talk != null) {
+        this.talks.add(talk);
+      }
+
       return this;
     }
 

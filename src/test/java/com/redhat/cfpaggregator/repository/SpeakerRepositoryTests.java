@@ -14,21 +14,24 @@ class SpeakerRepositoryTests extends BaseRepositoryTests {
   void itWorks() {
     assertThat(this.eventRepository.count()).isZero();
     assertThat(this.speakerRepository.count()).isZero();
-    var event = createEvent();
+    assertThat(this.talkRepository.count()).isZero();
+    var event = createEvent(false);
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isZero();
+    assertThat(this.talkRepository.count()).isZero();
 
     // Clone the sample data so as to not modify it
     this.speakerRepository.persist(SPEAKER.cloneAsNewWithNewEvent(event));
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isOne();
+    assertThat(this.talkRepository.count()).isZero();
 
     var speakers = this.speakerRepository.listAll();
     assertThat(speakers)
         .singleElement()
         .usingRecursiveComparison()
         .ignoringFieldsMatchingRegexes(".*hibernate.*")
-        .ignoringFields("id", "event")
+        .ignoringFields("id", "event", "talks")
         .isEqualTo(SPEAKER);
 
     var firstSpeaker = speakers.getFirst();
@@ -38,5 +41,6 @@ class SpeakerRepositoryTests extends BaseRepositoryTests {
         .ignoringFieldsMatchingRegexes(".*hibernate.*")
         .ignoringFields("id", "speakers")
         .isEqualTo(EVENT);
+    assertThat(firstSpeaker.getTalks()).isEmpty();
   }
 }
