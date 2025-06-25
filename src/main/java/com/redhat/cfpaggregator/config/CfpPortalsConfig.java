@@ -23,17 +23,17 @@ public interface CfpPortalsConfig {
    */
   enum PortalType {
     /**
-     * Represents the cfp.dev portal(s), which includes platforms such as Devoxx and VoxxedDays.
+     * The cfp.dev portal(s), which includes platforms such as Devoxx and VoxxedDays.
      */
     CFP_DEV,
 
     /**
-     * Represents the Sessionize platform as a type of portal in the CFP configuration.
+     * The Sessionize platform as a type of portal in the CFP configuration.
      */
     SESSIONIZE,
 
     /**
-     * Represents the Dev2Next platform as a type of portal in the CFP configuration.
+     * The Dev2Next platform as a type of portal in the CFP configuration.
      */
     DEV2NEXT
   }
@@ -42,6 +42,13 @@ public interface CfpPortalsConfig {
   @ConfigDocMapKey("portal-name")
   Map<String, CfpPortalConfig> portals();
 
+  /**
+   * The configuration for a single portal within the CFP configuration.
+   *
+   * This interface provides the details required to configure a specific portal instance,
+   * including its base URL, portal type, and an optional description. It is typically used
+   * as part of a mapping for multiple portals within the {@code CfpPortalsConfig}.
+   */
   interface CfpPortalConfig {
     /**
      * The base URL configured for the portal.
