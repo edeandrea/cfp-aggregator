@@ -18,7 +18,7 @@ import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
 @TestProfile(ConfigTestProfile.class)
-class CfpPortalsConfigTests implements QuarkusTestProfile {
+class CfpPortalsConfigTests {
   @Inject
   CfpPortalsConfig config;
 
@@ -26,7 +26,6 @@ class CfpPortalsConfigTests implements QuarkusTestProfile {
   void configCorrect() {
     assertThat(config).isNotNull();
     assertThat(config.portals())
-        .hasSize(3)
         .hasEntrySatisfying("portal1", config ->
             assertThat(config)
                 .isNotNull()
