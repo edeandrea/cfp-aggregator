@@ -10,6 +10,10 @@ cfps:
       description: Devoxx Morocco 2025
 
 quarkus:
+  # Jackson
+  jackson:
+    serialization-inclusion: non-empty
+
   # HTTP
   http:
     cors:
@@ -35,6 +39,11 @@ quarkus:
     jdbc:
       telemetry: true
 
+  # Wiremock
+  wiremock:
+    devservices:
+      enabled: false
+
 # Dev and test modes config
 '%dev,test':
   quarkus:
@@ -53,10 +62,20 @@ quarkus:
           level: DEBUG
       console:
         level: DEBUG
+    hibernate-orm:
+      log:
+        sql: true
 
 # test mode config
 '%test':
   quarkus:
+    log:
+      category:
+        "io.quarkiverse.wiremock.devservice.WireMockServer":
+          level: ERROR
+    wiremock:
+      devservices:
+        enabled: true
     otel:
       logs:
         enabled: false

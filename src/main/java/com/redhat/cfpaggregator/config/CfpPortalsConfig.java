@@ -1,13 +1,22 @@
 package com.redhat.cfpaggregator.config;
 
+import java.time.Duration;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import io.quarkus.runtime.annotations.ConfigDocMapKey;
 import io.quarkus.runtime.annotations.ConfigDocSection;
 
 import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithDefault;
 
+/**
+ * Configuration mapping interface for CFP portals.
+ *
+ * @author Eric Deandrea
+ */
 @ConfigMapping(prefix = "cfps")
 public interface CfpPortalsConfig {
   /**
@@ -38,9 +47,47 @@ public interface CfpPortalsConfig {
     DEV2NEXT
   }
 
+  /**
+   * Whether all clients should log requests
+   */
+  @WithDefault("false")
+  Boolean logRequests();
+
+  /**
+   * Whether all clients should log responses
+   */
+  @WithDefault("false")
+  Boolean logResponses();
+
+  /**
+   * Timeout for all client calls
+   */
+  @WithDefault("1m")
+  Duration timeout();
+
+  /**
+   * Retrieves the configuration for all defined portals.
+   *
+   * Each portal is represented as an entry in the map where the key is the portal's name
+   * and the value is its corresponding configuration. This configuration includes details
+   * such as the base URL, portal type, logging preferences, and timeout settings.
+   */
   @ConfigDocSection
   @ConfigDocMapKey("portal-name")
   Map<String, CfpPortalConfig> portals();
+
+  /**
+   * Retrieves the set of portal names from the configuration.
+   *
+   * The portal names are derived from the keys of the configured portal mappings.
+   * This method provides an immutable set of these names to ensure the portal
+   * mappings remain unmodifiable.
+   *
+   * @return an unmodifiable set containing the names of all configured portals
+   */
+  default Set<String> portalNames() {
+    return Collections.unmodifiableSet(portals().keySet());
+  }
 
   /**
    * The configuration for a single portal within the CFP configuration.
@@ -64,5 +111,23 @@ public interface CfpPortalsConfig {
      * An optional description for the portal configuration. This description may include additional context or details about the portal setup.
      */
     Optional<String> description();
+
+    /**
+     * Whether an individual client should log requests
+     */
+    @WithDefault("${cfps.log-requests:false}")
+    Boolean logRequests();
+
+    /**
+     * Whether an individual client should log responses
+     */
+    @WithDefault("${cfps.log-responses:false}")
+    Boolean logResponses();
+
+    /**
+     * Timeout for an individual client call
+     */
+    @WithDefault("${cfps.timeout:1m}")
+    Duration timeout();
   }
 }
