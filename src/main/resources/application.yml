@@ -1,0 +1,57 @@
+quarkus:
+  # HTTP
+#  http:
+#    cors:
+#      enabled: true
+#      origins: '*'
+#  dev-ui:
+#    cors:
+#      enabled: true
+#  tls:
+#    trust-all: true
+
+  # Hibernate
+  hibernate-orm:
+    physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+
+  # OpenTelemetry and tracing
+  otel:
+    logs:
+      enabled: true
+    metrics:
+      enabled: true
+  datasource:
+    jdbc:
+      telemetry: true
+
+# Dev and test modes config
+'%dev,test':
+  quarkus:
+    otel:
+      logs:
+        enabled: false
+    observability:
+      enabled: false
+    micrometer:
+      export:
+        otlp:
+          enabled: "${%test.quarkus.observability.enabled}"
+    log:
+      category:
+        'com.redhat':
+          level: DEBUG
+      console:
+        level: DEBUG
+
+# test mode config
+'%test':
+  quarkus:
+    otel:
+      logs:
+        enabled: false
+    observability:
+      enabled: false
+    micrometer:
+      export:
+        otlp:
+          enabled: "${%test.quarkus.observability.enabled}"
