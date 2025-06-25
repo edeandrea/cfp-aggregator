@@ -50,6 +50,5 @@ jobs:
       - name: "build-test-jvm-java${{ matrix.java }}"
         run: |
           ./mvnw -B clean verify \
-            -P${{ matrix.ai-provider }} \
             -Dquarkus.http.host=0.0.0.0 \
             -Dmaven.compiler.release=${{ matrix.java }}
