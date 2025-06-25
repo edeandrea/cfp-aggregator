@@ -1,14 +1,25 @@
+cfps:
+  portals:
+    devoxxuk2025:
+      base-url: https://devoxxuk25.cfp.dev
+      portal-type: cfp-dev
+      description: Devoxx UK 2025
+    devoxxma2025:
+      base-url: https://dvma25.cfp.dev
+      portal-type: cfp-dev
+      description: Devoxx Morocco 2025
+
 quarkus:
   # HTTP
-#  http:
-#    cors:
-#      enabled: true
-#      origins: '*'
-#  dev-ui:
-#    cors:
-#      enabled: true
-#  tls:
-#    trust-all: true
+  http:
+    cors:
+      enabled: true
+      origins: '*'
+  dev-ui:
+    cors:
+      enabled: true
+  tls:
+    trust-all: true
 
   # Hibernate
   hibernate-orm:
