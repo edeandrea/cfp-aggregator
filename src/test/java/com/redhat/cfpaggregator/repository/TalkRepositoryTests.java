@@ -16,6 +16,7 @@ class TalkRepositoryTests extends BaseRepositoryTests {
     assertThat(this.speakerRepository.count()).isZero();
     assertThat(this.talkRepository.count()).isZero();
 
+    // Add the event and the speaker
     var event = createEvent(true);
 
     assertThat(this.eventRepository.count()).isOne();
@@ -33,10 +34,8 @@ class TalkRepositoryTests extends BaseRepositoryTests {
         .isEqualTo(SPEAKER);
 
     // Clone the sample data so as to not modify it
-    var talk = TALK.cloneAsNew();
-    speaker.addTalks(talk);
-
-    this.talkRepository.persist(talk);
+    // Persist the talk
+    this.talkRepository.persist(TALK.cloneAsNewWithNewSpeakers(speaker));
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isOne();
     assertThat(this.talkRepository.count()).isOne();

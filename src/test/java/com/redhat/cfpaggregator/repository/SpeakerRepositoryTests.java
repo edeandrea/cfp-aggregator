@@ -15,11 +15,14 @@ class SpeakerRepositoryTests extends BaseRepositoryTests {
     assertThat(this.eventRepository.count()).isZero();
     assertThat(this.speakerRepository.count()).isZero();
     assertThat(this.talkRepository.count()).isZero();
+
+    // Create the event
     var event = createEvent(false);
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isZero();
     assertThat(this.talkRepository.count()).isZero();
 
+    // Persist the speaker
     // Clone the sample data so as to not modify it
     this.speakerRepository.persist(SPEAKER.cloneAsNewWithNewEvent(event));
     assertThat(this.eventRepository.count()).isOne();
