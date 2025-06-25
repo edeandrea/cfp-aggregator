@@ -35,7 +35,10 @@ class TalkRepositoryTests extends BaseRepositoryTests {
 
     // Clone the sample data so as to not modify it
     // Persist the talk
-    this.talkRepository.persist(TALK.cloneAsNewWithNewSpeakers(speaker));
+    var talk = TALK.cloneAsNew();
+    speaker.addTalks(talk);
+
+    this.talkRepository.persist(talk);
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isOne();
     assertThat(this.talkRepository.count()).isOne();

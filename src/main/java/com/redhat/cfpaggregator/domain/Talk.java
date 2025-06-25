@@ -56,13 +56,9 @@ public class Talk {
   }
 
   public Talk cloneAsNew() {
-    return cloneAsNewWithNewSpeakers();
-  }
-
-  public Talk cloneAsNewWithNewSpeakers(Speaker... speakers) {
     return toBuilder()
         .id(null)
-        .speakers(speakers)
+        .speakers(List.of())
         .build();
   }
 
