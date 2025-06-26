@@ -1,23 +1,22 @@
-		-- Sequences
-    create sequence event_seq start with 1 increment by 1;
+
     create sequence speaker_seq start with 1 increment by 1;
+
     create sequence talk_seq start with 1 increment by 1;
 
-		-- Tables
     create table events (
         cfp_closing timestamp(6) with time zone,
         cfp_opening timestamp(6) with time zone,
         from_date timestamp(6) with time zone,
-        id bigint not null,
         to_date timestamp(6) with time zone,
         description varchar(255),
         flickr_url varchar(255),
         name varchar(255) not null,
+        portal_name varchar(255) not null,
         time_zone varchar(255),
         website_url varchar(255),
         you_tube_url varchar(255),
         portal_type enum ('CFP_DEV','DEV2NEXT','SESSIONIZE') not null,
-        primary key (id)
+        primary key (portal_name)
     );
 
     create table speaker_talks (
@@ -26,12 +25,12 @@
     );
 
     create table speakers (
-        event_id bigint not null,
         id bigint not null,
         bio TEXT,
         bluesky_username varchar(255),
         company varchar(255),
         country_name varchar(255),
+        event_portal_name varchar(255) not null,
         first_name varchar(255) not null,
         image_url varchar(255),
         last_name varchar(255) not null,
@@ -48,18 +47,17 @@
         primary key (id)
     );
 
-		-- Foreign keys
-    alter table if exists speaker_talks 
-       add constraint FKbqpjb2jdes2vmpywymqr2pc97 
-       foreign key (talk_id) 
+    alter table if exists speaker_talks
+       add constraint FKbqpjb2jdes2vmpywymqr2pc97
+       foreign key (talk_id)
        references talks;
 
-    alter table if exists speaker_talks 
-       add constraint FK6x1lw682i95lpm23nntpg6bp2 
-       foreign key (speaker_id) 
+    alter table if exists speaker_talks
+       add constraint FK6x1lw682i95lpm23nntpg6bp2
+       foreign key (speaker_id)
        references speakers;
 
-    alter table if exists speakers 
-       add constraint FKssjp34bs2oghuq689b5liqlpn 
-       foreign key (event_id) 
+    alter table if exists speakers
+       add constraint FKm02nf54s4ipg987m5xx2lfpqu
+       foreign key (event_portal_name)
        references events;
