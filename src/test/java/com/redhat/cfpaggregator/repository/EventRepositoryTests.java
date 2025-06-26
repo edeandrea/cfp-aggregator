@@ -20,7 +20,7 @@ class EventRepositoryTests extends BaseRepositoryTests {
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isZero();
     assertThat(event).isNotNull();
-    assertThat(event.getId()).isPositive();
+    assertThat(event.getPortalName()).isNotBlank();
 
     // Clone the sample data so as to not modify it
     var speaker = SPEAKER.cloneAsNew();
@@ -35,7 +35,7 @@ class EventRepositoryTests extends BaseRepositoryTests {
         .singleElement()
         .usingRecursiveComparison()
         .ignoringFieldsMatchingRegexes(".*hibernate.*")
-        .ignoringFields("id", "speakers")
+        .ignoringFields("speakers")
         .isEqualTo(EVENT);
 
     var firstEvent = events.getFirst();

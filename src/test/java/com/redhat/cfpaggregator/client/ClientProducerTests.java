@@ -126,6 +126,8 @@ class ClientProducerTests {
         .isNotNull()
         .usingRecursiveComparison()
         .isEqualTo(new CfpDevEventDetails(
+            Instant.parse("2025-01-10T23:59:49Z"),
+            Instant.parse("2024-11-04T00:01:49Z"),
             null,
             new URL("https://www.flickr.com/photos/125714253@N02/albums/"),
             Instant.parse("2025-05-07T07:00:00Z"),

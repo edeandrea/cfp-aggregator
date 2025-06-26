@@ -14,6 +14,7 @@ import com.redhat.cfpaggregator.domain.Talk;
 abstract class BaseRepositoryTests {
   protected static final TimeZone TIMEZONE = TimeZone.getDefault();
   protected static final Event EVENT = Event.builder()
+      .portalName("Test Portal")
       .name("Test Event")
       .description("Some event somewhere")
       .fromDate(Instant.now().minusSeconds(Duration.ofDays(2).toSeconds()))
@@ -21,6 +22,8 @@ abstract class BaseRepositoryTests {
       .timeZone(TIMEZONE.getDisplayName())
       .websiteUrl("https://www.example.com")
       .portalType(PortalType.CFP_DEV)
+      .cfpOpening(Instant.now().minusSeconds(Duration.ofDays(90).toSeconds()))
+      .cfpClosing(Instant.now().minusSeconds(Duration.ofDays(75).toSeconds()))
       .build();
 
   protected static final Speaker SPEAKER = Speaker.builder()

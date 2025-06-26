@@ -146,7 +146,7 @@ public class Speaker {
         ", blueskyUsername='" + blueskyUsername + '\'' +
         ", countryName='" + countryName + '\'' +
         ", bio='" + bio + '\'' +
-        ", eventId=" + event.getId() +
+        ", eventPortalName=" + event.getPortalName() +
         ", talks=" + talks +
         '}';
   }

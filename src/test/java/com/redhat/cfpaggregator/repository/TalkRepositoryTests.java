@@ -23,7 +23,7 @@ class TalkRepositoryTests extends BaseRepositoryTests {
     assertThat(this.speakerRepository.count()).isOne();
     assertThat(this.talkRepository.count()).isZero();
     assertThat(event).isNotNull();
-    assertThat(event.getId()).isPositive();
+    assertThat(event.getPortalName()).isNotBlank();
     assertThat(event.getSpeakers()).hasSize(1);
 
     var speaker = event.getSpeakers().getFirst();

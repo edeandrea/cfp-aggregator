@@ -15,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Eric Deandrea
  */
 public record CfpDevEventDetails(
+    @JsonProperty("cfpClosing") Instant cfpClosing,
+    @JsonProperty("cfpOpening") Instant cfpOpening,
     @JsonProperty("description") String description,
     @JsonProperty("flickrURL") URL flickrUrl,
     @JsonProperty("fromDate") Instant fromDate,
