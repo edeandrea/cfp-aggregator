@@ -8,6 +8,9 @@ cfps:
       base-url: https://devoxxpl25.cfp.dev
       portal-type: cfp-dev
       description: Devoxx Poland 2025
+  reload-on-startup: true
+  log-requests: true
+  log-responses: true
 
 quarkus:
   # Flyway

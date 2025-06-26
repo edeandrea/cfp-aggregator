@@ -11,14 +11,35 @@ import io.quarkus.test.junit.QuarkusTest;
 @TestTransaction
 class EventRepositoryTests extends BaseRepositoryTests {
   @Test
+  void deleteAllWithCascade() {
+    assertThat(this.eventRepository.count()).isZero();
+    assertThat(this.speakerRepository.count()).isZero();
+    assertThat(this.talkRepository.count()).isZero();
+
+    createEvent(true, true);
+
+    assertThat(this.eventRepository.count()).isOne();
+    assertThat(this.speakerRepository.count()).isOne();
+    assertThat(this.talkRepository.count()).isOne();
+
+    this.eventRepository.deleteAllWithCascade();
+
+    assertThat(this.eventRepository.count()).isZero();
+    assertThat(this.speakerRepository.count()).isZero();
+    assertThat(this.talkRepository.count()).isZero();
+  }
+
+  @Test
   void itWorks() {
     assertThat(this.eventRepository.count()).isZero();
     assertThat(this.speakerRepository.count()).isZero();
+    assertThat(this.talkRepository.count()).isZero();
 
     var event = createEvent(false);
 
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isZero();
+    assertThat(this.talkRepository.count()).isZero();
     assertThat(event).isNotNull();
     assertThat(event.getPortalName()).isNotBlank();
 
@@ -29,6 +50,7 @@ class EventRepositoryTests extends BaseRepositoryTests {
     this.eventRepository.persist(event);
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isOne();
+    assertThat(this.talkRepository.count()).isZero();
 
     var events = this.eventRepository.listAll();
     assertThat(events)

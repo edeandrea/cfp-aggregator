@@ -60,7 +60,7 @@ public class Speaker {
   private Event event;
 
   @ManyToMany(
-      cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+      cascade = CascadeType.ALL,
       fetch = FetchType.LAZY
   )
   @JoinTable(
@@ -142,7 +142,7 @@ public class Speaker {
   public String toString() {
     return "Speaker{" +
         "id=" + id +
-        "eventSpeakerId=" + eventSpeakerId +
+        ", eventSpeakerId=" + eventSpeakerId +
         ", firstName='" + firstName + '\'' +
         ", lastName='" + lastName + '\'' +
         ", company='" + company + '\'' +

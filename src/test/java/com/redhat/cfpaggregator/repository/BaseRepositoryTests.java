@@ -59,10 +59,20 @@ abstract class BaseRepositoryTests {
   TalkRepository talkRepository;
 
   protected Event createEvent(boolean withSpeaker) {
+    return createEvent(withSpeaker, false);
+  }
+
+  protected Event createEvent(boolean withSpeaker, boolean withTalk) {
     var event = EVENT.cloneAsNew();
 
-    if (withSpeaker) {
-      event.addSpeakers(SPEAKER.cloneAsNew());
+    if (withSpeaker || withTalk) {
+      var speaker = SPEAKER.cloneAsNew();
+
+      if (withTalk) {
+        speaker.addTalks(TALK.cloneAsNew());
+      }
+
+      event.addSpeakers(speaker);
     }
 
     this.eventRepository.persist(event);

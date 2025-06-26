@@ -1,6 +1,7 @@
 package com.redhat.cfpaggregator.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
@@ -25,6 +26,7 @@ import com.redhat.cfpaggregator.domain.Speaker;
  *
  * @author Eric Deandrea
  */
+@Transactional
 @ApplicationScoped
 public class SpeakerRepository implements PanacheRepository<Speaker> {
 }

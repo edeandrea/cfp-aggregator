@@ -1,4 +1,4 @@
-package com.redhat.cfpaggregator.client.cfpdev;
+package com.redhat.cfpaggregator.domain;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -12,15 +12,15 @@ import java.util.Set;
  *
  * @author Eric Deandrea
  */
-public final class CfpDevTalkSearchCriteria {
+public final class TalkSearchCriteria {
   private final Set<String> talkKeywords = new LinkedHashSet<>();
   private final Set<String> speakerCompanies = new LinkedHashSet<>();
 
-  private CfpDevTalkSearchCriteria() {
+  private TalkSearchCriteria() {
     // Private constructor to enforce builder usage
   }
 
-  private CfpDevTalkSearchCriteria(Builder builder) {
+  private TalkSearchCriteria(Builder builder) {
     this.talkKeywords.addAll(builder.talkKeywords);
     this.speakerCompanies.addAll(builder.speakerCompanies);
   }
@@ -49,6 +49,14 @@ public final class CfpDevTalkSearchCriteria {
     return new Builder(this);
   }
 
+  @Override
+  public String toString() {
+    return "TalkSearchCriteria{" +
+        "talkKeywords=" + talkKeywords +
+        ", speakerCompanies=" + speakerCompanies +
+        '}';
+  }
+
   public static class Builder {
     private final Set<String> talkKeywords = new LinkedHashSet<>();
     private final Set<String> speakerCompanies = new LinkedHashSet<>();
@@ -57,7 +65,7 @@ public final class CfpDevTalkSearchCriteria {
       // Default constructor
     }
 
-    private Builder(CfpDevTalkSearchCriteria criteria) {
+    private Builder(TalkSearchCriteria criteria) {
       this.talkKeywords.addAll(criteria.talkKeywords);
       this.speakerCompanies.addAll(criteria.speakerCompanies);
     }
@@ -110,8 +118,8 @@ public final class CfpDevTalkSearchCriteria {
       return this;
     }
 
-    public CfpDevTalkSearchCriteria build() {
-      return new CfpDevTalkSearchCriteria(this);
+    public TalkSearchCriteria build() {
+      return new TalkSearchCriteria(this);
     }
   }
 }

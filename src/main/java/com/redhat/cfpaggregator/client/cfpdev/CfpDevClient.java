@@ -9,6 +9,8 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
+import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
+
 /**
  * Represents a REST client interface for accessing the cfp.dev API.
  *
@@ -53,7 +55,7 @@ public interface CfpDevClient {
    * @param searchCriteria the search criteria containing talk keywords and speaker companies for filtering the results
    * @return a list of {@code CfpDevTalkDetails} objects that match the search criteria
    */
-  default List<CfpDevTalkDetails> findTalks(CfpDevTalkSearchCriteria searchCriteria) {
+  default List<CfpDevTalkDetails> findTalks(TalkSearchCriteria searchCriteria) {
     // 1) Find all the talks for each keyword (if there are any)
     var talksStream = searchCriteria.hasTalkKeywords() ?
         searchCriteria.getTalkKeywords().stream()

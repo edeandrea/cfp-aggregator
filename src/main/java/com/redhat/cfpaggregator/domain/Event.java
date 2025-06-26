@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,6 +17,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.URL;
 
 import com.redhat.cfpaggregator.config.CfpPortalsConfig.PortalType;
 
@@ -33,7 +36,11 @@ public class Event {
 
   @NotEmpty(message = "name can not be null or empty")
   private String name;
+
+  @Column(columnDefinition = "TEXT")
   private String description;
+
+  @URL(message = "flickr_url must be a valid URL")
   private String flickrUrl;
   private Instant fromDate;
   private String timeZone;

@@ -8,7 +8,7 @@
         cfp_opening timestamp(6) with time zone,
         from_date timestamp(6) with time zone,
         to_date timestamp(6) with time zone,
-        description varchar(255),
+        description TEXT,
         flickr_url varchar(255),
         name varchar(255) not null,
         portal_name varchar(255) not null,
@@ -25,6 +25,7 @@
     );
 
     create table speakers (
+        event_speaker_id bigint not null,
         id bigint not null,
         bio TEXT,
         bluesky_username varchar(255),
@@ -40,8 +41,10 @@
     );
 
     create table talks (
+        event_talk_id bigint not null,
         id bigint not null,
-        description varchar(255),
+        description TEXT,
+        summary TEXT,
         title varchar(255) not null,
         video_url varchar(255),
         primary key (id)

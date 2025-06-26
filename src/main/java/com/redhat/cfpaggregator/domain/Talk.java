@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,8 +29,12 @@ public class Talk {
 
   @NotEmpty
   private String title;
+
+  @Column(columnDefinition = "TEXT")
   private String description;
   private String videoUrl;
+
+  @Column(columnDefinition = "TEXT")
   private String summary;
 
   @ManyToMany(mappedBy = "talks")
@@ -84,7 +89,7 @@ public class Talk {
   public String toString() {
     return "Talk{" +
         "id=" + id +
-        "eventTalkId=" + eventTalkId +
+        ", eventTalkId=" + eventTalkId +
         ", title='" + title + '\'' +
         ", description='" + description + '\'' +
         ", summary='" + summary + '\'' +

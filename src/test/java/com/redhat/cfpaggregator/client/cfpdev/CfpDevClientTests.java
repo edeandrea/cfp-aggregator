@@ -32,6 +32,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.redhat.cfpaggregator.client.ClientProducer;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevClientTests.ConfigTestProfile;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevTalkDetails.Keyword;
+import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
 import io.quarkiverse.wiremock.devservice.ConnectWireMock;
 import io.smallrye.common.annotation.Identifier;
 
@@ -285,7 +286,7 @@ class CfpDevClientTests {
             ]
             """, 200)));
 
-    assertThat(getClient().findTalks(CfpDevTalkSearchCriteria.builder().build()))
+    assertThat(getClient().findTalks(TalkSearchCriteria.builder().build()))
         .isNotNull()
         .hasSize(2)
         .usingRecursiveFieldByFieldElementComparator()
@@ -355,7 +356,7 @@ class CfpDevClientTests {
   void findTalksKeywordsNoSpeakers() throws MalformedURLException {
     setupFindTalksWithKeywords();
 
-    var talkSearchCriteria = CfpDevTalkSearchCriteria.builder()
+    var talkSearchCriteria = TalkSearchCriteria.builder()
         .talkKeywords("quarkus", "spring")
         .build();
 
@@ -854,7 +855,7 @@ class CfpDevClientTests {
             ]
             """, 200)));
 
-    var talkSearchCriteria = CfpDevTalkSearchCriteria.builder()
+    var talkSearchCriteria = TalkSearchCriteria.builder()
         .speakerCompanies("Red Hat", "Broadcom")
         .build();
 
@@ -928,7 +929,7 @@ class CfpDevClientTests {
   void findTalksWithKeywordsAndSpeakers() throws MalformedURLException {
     setupFindTalksWithKeywords();
 
-    var talkSearchCriteria = CfpDevTalkSearchCriteria.builder()
+    var talkSearchCriteria = TalkSearchCriteria.builder()
         .talkKeywords("quarkus", "spring")
         .speakerCompanies("Red Hat", "Broadcom")
         .build();

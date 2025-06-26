@@ -2,6 +2,7 @@ package com.redhat.cfpaggregator.config;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -48,6 +49,12 @@ public interface CfpPortalsConfig {
   }
 
   /**
+   * Whether or not the application should reload all of its data on startup
+   */
+  @WithDefault("false")
+  Boolean reloadOnStartup();
+
+  /**
    * Whether all clients should log requests
    */
   @WithDefault("false")
@@ -77,6 +84,11 @@ public interface CfpPortalsConfig {
   Map<String, CfpPortalConfig> portals();
 
   /**
+   * Retrieves the default search criteria configuration.
+   */
+  DefaultSearchCriteria defaultSearchCriteria();
+
+  /**
    * Retrieves the set of portal names from the configuration.
    *
    * The portal names are derived from the keys of the configured portal mappings.
@@ -87,6 +99,17 @@ public interface CfpPortalsConfig {
    */
   default Set<String> portalNames() {
     return Collections.unmodifiableSet(portals().keySet());
+  }
+
+  /**
+   * Defines the default search criteria for the CFP portals configuration.
+   */
+  interface DefaultSearchCriteria {
+    @WithDefault("Quarkus")
+    List<String> talkKeywords();
+
+    @WithDefault("Red Hat")
+    List<String> companies();
   }
 
   /**
