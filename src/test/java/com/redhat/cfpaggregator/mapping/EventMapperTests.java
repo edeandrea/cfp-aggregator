@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import io.quarkus.test.junit.QuarkusTest;
 
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevEventDetails;
+import com.redhat.cfpaggregator.config.CfpPortalsConfig.PortalType;
 import com.redhat.cfpaggregator.domain.Event;
 
 @QuarkusTest
@@ -46,9 +47,11 @@ class EventMapperTests {
         .toDate(eventDetails.toDate())
         .websiteUrl(eventDetails.websiteUrl().toString())
         .youTubeUrl(eventDetails.youTubeUrl().toString())
+        .portalName("testPortal")
+        .portalType(PortalType.CFP_DEV)
         .build();
 
-    var event = this.eventMapper.fromCfpDev(eventDetails);
+    var event = this.eventMapper.fromCfpDev("testPortal", PortalType.CFP_DEV, eventDetails);
 
     assertThat(event)
         .isNotNull()
