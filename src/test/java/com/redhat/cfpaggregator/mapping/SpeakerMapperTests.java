@@ -35,7 +35,7 @@ class SpeakerMapperTests {
     );
 
     var expectedSpeaker = Speaker.builder()
-        .id(1234567890L)
+        .eventSpeakerId(1234567890L)
         .firstName("John")
         .lastName("Doe")
         .company("Fake Company")

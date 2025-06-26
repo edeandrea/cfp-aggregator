@@ -19,6 +19,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Represents a speaker entity with various attributes such as personal
@@ -35,6 +36,9 @@ public class Speaker {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "speaker_seq")
   @SequenceGenerator(name = "speaker_seq", sequenceName = "speaker_seq", allocationSize = 1)
   private Long id;
+
+  @NotNull(message = "event_speaker_id can not be null")
+  private Long eventSpeakerId;
 
   @NotEmpty(message = "first_name can not be null or empty")
   private String firstName;
@@ -73,6 +77,7 @@ public class Speaker {
   // Private constructor for builder
   private Speaker(Builder builder) {
     this.id = builder.id;
+    this.eventSpeakerId = builder.eventSpeakerId;
     this.firstName = builder.firstName;
     this.lastName = builder.lastName;
     this.company = builder.company;
@@ -137,6 +142,7 @@ public class Speaker {
   public String toString() {
     return "Speaker{" +
         "id=" + id +
+        "eventSpeakerId=" + eventSpeakerId +
         ", firstName='" + firstName + '\'' +
         ", lastName='" + lastName + '\'' +
         ", company='" + company + '\'' +
@@ -254,8 +260,17 @@ public class Speaker {
     return this.talks;
   }
 
+  public Long getEventSpeakerId() {
+    return eventSpeakerId;
+  }
+
+  public void setEventSpeakerId(Long speakerId) {
+    this.eventSpeakerId = speakerId;
+  }
+
   public static final class Builder {
     private Long id;
+    private Long eventSpeakerId;
     private String firstName;
     private String lastName;
     private String company;
@@ -268,11 +283,12 @@ public class Speaker {
     private Event event;
     private List<Talk> talks = new ArrayList<>();
 
-    public Builder() {
+    private Builder() {
     }
 
-    public Builder(Speaker speaker) {
+    private Builder(Speaker speaker) {
       this.id = speaker.id;
+      this.eventSpeakerId = speaker.eventSpeakerId;
       this.firstName = speaker.firstName;
       this.lastName = speaker.lastName;
       this.company = speaker.company;
@@ -287,6 +303,11 @@ public class Speaker {
 
     public Builder id(Long id) {
       this.id = id;
+      return this;
+    }
+
+    public Builder eventSpeakerId(Long eventSpeakerId) {
+      this.eventSpeakerId = eventSpeakerId;
       return this;
     }
 

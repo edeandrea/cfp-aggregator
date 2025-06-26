@@ -5,7 +5,7 @@ import java.net.URL;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record CfpDevSpeakerDetails(
-    @JsonProperty("id") long id,
+    @JsonProperty("id") long eventSpeakerId,
     @JsonProperty("firstName") String firstName,
     @JsonProperty("lastName") String lastName,
     @JsonProperty("bio") String bio,

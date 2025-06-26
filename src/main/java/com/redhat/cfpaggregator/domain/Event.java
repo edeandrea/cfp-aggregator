@@ -269,10 +269,10 @@ public class Event {
     private Instant cfpOpening;
     private Instant cfpClosing;
 
-    public Builder() {
+    private Builder() {
     }
 
-    public Builder(Event event) {
+    private Builder(Event event) {
       this.portalName = event.portalName;
       this.name = event.name;
       this.description = event.description;
