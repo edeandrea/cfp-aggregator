@@ -1,0 +1,40 @@
+{
+  "id" : "c262d353-3308-413f-8d7f-0adc1762e94d",
+  "name" : "api_public_event",
+  "request" : {
+    "url" : "/api/public/event",
+    "method" : "GET",
+    "headers" : {
+      "X-Portal-Name" : {
+        "equalTo" : "dvgr25"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      },
+      "User-Agent" : {
+        "equalTo" : "Quarkus REST Client"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"id\":1151,\"slug\":\"dvgr25\",\"name\":\"Devoxx Greece 2025\",\"description\":\"Devoxx Greece 2025 will take place from Thursday, April 10h, to Saturday, April 12th, 2025\",\"tenant\":{\"id\":1,\"name\":\"SoftConf\"},\"codeOfConduct\":null,\"website\":\"http://devoxx.gr\",\"twitterHandle\":\"@devoxxgr\",\"fromDate\":\"2025-04-10T05:15:00Z\",\"toDate\":\"2025-04-12T16:00:00Z\",\"flickrURL\":\"https://www.flickr.com/photos/bejug/albums/with/72177720308364130\",\"youTubeURL\":\"https://www.youtube.com/@DevoxxForever\",\"live\":true,\"theme\":\"DEVOXX\",\"myBadgeActive\":null,\"cfpOpening\":\"2025-04-07T06:30:00Z\",\"cfpClosing\":\"2024-12-01T17:00:00Z\",\"eventImageURL\":\"https://devoxx.gr/wp-content/uploads/2022/11/Devoxx-site-logo-175x53-72ppi.png\",\"maxDescriptionLength\":1500,\"maxTitleLength\":200,\"maxProposals\":5,\"proposalLanguages\":[{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"}],\"websiteLanguage\":{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"},\"sessionTypes\":[],\"tracks\":[],\"location\":{\"id\":1101,\"name\":\"Megaron Athens International Conference Centre\"},\"locationId\":1101,\"locationName\":\"Megaron Athens International Conference Centre\",\"locationAddress\":\"\",\"locationCity\":\"Athens\",\"locationCountry\":\"Greece\",\"timezone\":\"Europe/Athens\",\"venueLongitude\":4.4140204,\"venueLatitude\":51.2459115,\"enableTags\":false}",
+    "headers" : {
+      "X-Content-Type-Options" : "nosniff",
+      "Pragma" : "no-cache",
+      "Sozu-Id" : "01JYSMQ86SBSZ0SNHTF0YR20VX",
+      "Date" : "Fri, 27 Jun 2025 21:29:27 GMT",
+      "X-Frame-Options" : "DENY",
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "ETag" : "\"1151\"",
+      "Set-Cookie" : "X-Clever-Cloud-Sticky-Id=gcglmiz9qx2x0gbi9pcm0g; Path=/",
+      "Vary" : [ "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers" ],
+      "Expires" : "0",
+      "X-XSS-Protection" : "0",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "c262d353-3308-413f-8d7f-0adc1762e94d",
+  "persistent" : true,
+  "insertionIndex" : 2
+}

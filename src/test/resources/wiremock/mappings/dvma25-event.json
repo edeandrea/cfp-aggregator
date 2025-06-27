@@ -1,0 +1,40 @@
+{
+  "id" : "603f8921-2599-474b-add1-7c7522f231c3",
+  "name" : "api_public_event",
+  "request" : {
+    "url" : "/api/public/event",
+    "method" : "GET",
+    "headers" : {
+      "X-Portal-Name" : {
+        "equalTo" : "dvma25"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      },
+      "User-Agent" : {
+        "equalTo" : "Quarkus REST Client"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"id\":1151,\"slug\":\"dvma25\",\"name\":\"Devoxx Morocco\",\"description\":null,\"tenant\":{\"id\":1,\"name\":\"XHub\"},\"codeOfConduct\":null,\"website\":\"https://devoxx.ma\",\"twitterHandle\":\"\",\"fromDate\":\"2025-11-12T06:30:00Z\",\"toDate\":\"2025-11-14T11:00:00Z\",\"flickrURL\":\"\",\"youTubeURL\":\"\",\"live\":true,\"theme\":\"DEVOXX\",\"myBadgeActive\":null,\"cfpOpening\":\"2025-05-21T02:30:00Z\",\"cfpClosing\":\"2025-06-29T20:59:31Z\",\"eventImageURL\":\"\",\"maxDescriptionLength\":1500,\"maxTitleLength\":200,\"maxProposals\":3,\"proposalLanguages\":[{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"},{\"id\":46,\"alpha2\":\"fr\",\"name\":\"French\",\"flag32\":\"FR-32.png\"},{\"id\":1801,\"alpha2\":\"ar\",\"name\":\"Arabic\",\"flag32\":\"MA-32.png\"}],\"websiteLanguage\":{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"},\"sessionTypes\":[],\"tracks\":[],\"location\":{\"id\":1451,\"name\":\"Palm Plaza Hotel \"},\"locationId\":1451,\"locationName\":\"Palm Plaza Hotel \",\"locationAddress\":\"Palm Plaza Hotel \",\"locationCity\":\"Marrakech\",\"locationCountry\":\"Morocco\",\"timezone\":\"Africa/Casablanca\",\"venueLongitude\":null,\"venueLatitude\":null,\"enableTags\":false}",
+    "headers" : {
+      "X-Content-Type-Options" : "nosniff",
+      "Pragma" : "no-cache",
+      "Sozu-Id" : "01JYSMXH6TN1DDM2YJVGEDYDNM",
+      "Date" : "Fri, 27 Jun 2025 21:32:53 GMT",
+      "X-Frame-Options" : "DENY",
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "ETag" : "\"1151\"",
+      "Set-Cookie" : "X-Clever-Cloud-Sticky-Id=kuqr3av9tgitj14fsyruna; Path=/",
+      "Vary" : [ "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers" ],
+      "Expires" : "0",
+      "X-XSS-Protection" : "0",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "603f8921-2599-474b-add1-7c7522f231c3",
+  "persistent" : true,
+  "insertionIndex" : 2
+}

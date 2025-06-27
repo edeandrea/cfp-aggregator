@@ -16,6 +16,7 @@
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
         <quarkus.platform.version>3.23.4</quarkus.platform.version>
+        <quarkus.playwright.version>2.1.1</quarkus.playwright.version>
         <quarkus.wiremock.version>1.5.0</quarkus.wiremock.version>
         <surefire-plugin.version>3.5.3</surefire-plugin.version>
         <vaadin.version>24.8.0</vaadin.version>
@@ -77,15 +78,6 @@
             <artifactId>line-awesome</artifactId>
             <version>${lineawesome.version}</version>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>com.vaadin</groupId>-->
-        <!--            <artifactId>vaadin-jandex</artifactId>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.jboss.slf4j</groupId>-->
-        <!--            <artifactId>slf4j-jboss-logmanager</artifactId>-->
-        <!--            <version>1.1.0.Final</version>-->
-        <!--        </dependency>-->
 
         <!-- Observability-->
         <dependency>
@@ -164,6 +156,12 @@
             <groupId>io.quarkiverse.wiremock</groupId>
             <artifactId>quarkus-wiremock-test</artifactId>
             <version>${quarkus.wiremock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkiverse.playwright</groupId>
+            <artifactId>quarkus-playwright</artifactId>
+            <version>${quarkus.playwright.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

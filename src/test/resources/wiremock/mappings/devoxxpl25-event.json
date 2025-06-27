@@ -1,0 +1,40 @@
+{
+  "id" : "b9815c8d-2f71-4fb6-95aa-52e9fc58a28f",
+  "name" : "api_public_event",
+  "request" : {
+    "url" : "/api/public/event",
+    "method" : "GET",
+    "headers" : {
+      "X-Portal-Name" : {
+        "equalTo" : "devoxxpl25"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      },
+      "User-Agent" : {
+        "equalTo" : "Quarkus REST Client"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"id\":1151,\"slug\":\"devoxxpl25\",\"name\":\"Devoxx Poland 2025\",\"description\":\"Devoxx Poland\",\"tenant\":{\"id\":1,\"name\":\"Dev Events Sp. z o.o.\"},\"codeOfConduct\":\"https://devoxx.pl/code-of-conduct/\",\"website\":\"https://devoxx.pl\",\"twitterHandle\":\"@DevoxxPL\",\"fromDate\":\"2025-06-11T06:30:00Z\",\"toDate\":\"2025-06-13T18:00:00Z\",\"flickrURL\":\"https://www.flickr.com/photos/bejug/albums/\",\"youTubeURL\":\"https://devoxx.pl/youtube\",\"live\":true,\"theme\":\"DEVOXX\",\"myBadgeActive\":null,\"cfpOpening\":\"2024-12-09T08:00:31Z\",\"cfpClosing\":\"2025-02-28T22:59:00Z\",\"eventImageURL\":\"\",\"maxDescriptionLength\":1500,\"maxTitleLength\":200,\"maxProposals\":5,\"proposalLanguages\":[{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"}],\"websiteLanguage\":{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"},\"sessionTypes\":[],\"tracks\":[],\"location\":{\"id\":1101,\"name\":\"ICE Krakow, Poland\"},\"locationId\":1101,\"locationName\":\"ICE Krakow, Poland\",\"locationAddress\":\"Marii Konopnickiej 17\",\"locationCity\":\"Krakow\",\"locationCountry\":\"Poland\",\"timezone\":\"Europe/Warsaw\",\"venueLongitude\":4.4140204,\"venueLatitude\":51.2459115,\"enableTags\":false}",
+    "headers" : {
+      "X-Content-Type-Options" : "nosniff",
+      "Pragma" : "no-cache",
+      "Sozu-Id" : "01JYSMHJNQ2D4610MJ4WSFDGMS",
+      "Date" : "Fri, 27 Jun 2025 21:26:21 GMT",
+      "X-Frame-Options" : "DENY",
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "ETag" : "\"1151\"",
+      "Set-Cookie" : "X-Clever-Cloud-Sticky-Id=kzol8gdttnenf8h2oxhwda; Path=/",
+      "Vary" : [ "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers" ],
+      "Expires" : "0",
+      "X-XSS-Protection" : "0",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "b9815c8d-2f71-4fb6-95aa-52e9fc58a28f",
+  "persistent" : true,
+  "insertionIndex" : 2
+}

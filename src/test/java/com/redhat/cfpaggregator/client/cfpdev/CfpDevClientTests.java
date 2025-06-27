@@ -130,7 +130,7 @@ class CfpDevClientTests {
             }
             """, 200)));
 
-    assertThat(getClient().getEventDetails())
+    assertThat(getClient().getEventDetails("portal1"))
         .isNotNull()
         .usingRecursiveComparison()
         .isEqualTo(new CfpDevEventDetails(
@@ -150,6 +150,7 @@ class CfpDevClientTests {
         1,
         getRequestedFor(urlPathEqualTo("/api/public/event"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
+            .withHeader(ClientProducer.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
   }
 
@@ -286,7 +287,7 @@ class CfpDevClientTests {
             ]
             """, 200)));
 
-    assertThat(getClient().findTalks(TalkSearchCriteria.builder().build()))
+    assertThat(getClient().findTalks(TalkSearchCriteria.builder().build(), "portal1"))
         .isNotNull()
         .hasSize(2)
         .usingRecursiveFieldByFieldElementComparator()
@@ -349,6 +350,7 @@ class CfpDevClientTests {
         1,
         getRequestedFor(urlPathEqualTo("/api/public/talks"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
+        .withHeader(ClientProducer.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
   }
 
@@ -360,7 +362,7 @@ class CfpDevClientTests {
         .talkKeywords("quarkus", "spring")
         .build();
 
-    assertThat(getClient().findTalks(talkSearchCriteria))
+    assertThat(getClient().findTalks(talkSearchCriteria, "portal1"))
         .isNotNull()
         .hasSize(4)
         .usingRecursiveFieldByFieldElementComparator()
@@ -859,7 +861,7 @@ class CfpDevClientTests {
         .speakerCompanies("Red Hat", "Broadcom")
         .build();
 
-    assertThat(getClient().findTalks(talkSearchCriteria))
+    assertThat(getClient().findTalks(talkSearchCriteria, "portal1"))
         .isNotNull()
         .hasSize(2)
         .usingRecursiveFieldByFieldElementComparator()
@@ -922,6 +924,7 @@ class CfpDevClientTests {
         1,
         getRequestedFor(urlPathEqualTo("/api/public/talks"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
+            .withHeader(ClientProducer.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
   }
 
@@ -934,7 +937,7 @@ class CfpDevClientTests {
         .speakerCompanies("Red Hat", "Broadcom")
         .build();
 
-    assertThat(getClient().findTalks(talkSearchCriteria))
+    assertThat(getClient().findTalks(talkSearchCriteria, "portal1"))
         .isNotNull()
         .hasSize(2)
         .usingRecursiveFieldByFieldElementComparator()
@@ -1272,6 +1275,7 @@ class CfpDevClientTests {
         getRequestedFor(urlPathTemplate("/api/public/search/{searchQuery}"))
             .withPathParam("searchQuery", equalTo("quarkus"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
+            .withHeader(ClientProducer.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
 
     this.wireMock.verifyThat(
@@ -1279,6 +1283,7 @@ class CfpDevClientTests {
         getRequestedFor(urlPathTemplate("/api/public/search/{searchQuery}"))
             .withPathParam("searchQuery", equalTo("spring"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
+            .withHeader(ClientProducer.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
   }
 

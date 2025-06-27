@@ -1,0 +1,39 @@
+{
+  "id" : "02569e6d-eb17-4bff-a0bb-ed17d131e545",
+  "name" : "api_public_search_quarkus",
+  "request" : {
+    "url" : "/api/public/search/Quarkus",
+    "method" : "GET",
+    "headers" : {
+      "X-Portal-Name" : {
+        "equalTo" : "dvgr25"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      },
+      "User-Agent" : {
+        "equalTo" : "Quarkus REST Client"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "dvgr25-search.json",
+    "headers" : {
+      "X-Frame-Options" : "DENY",
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "X-Clever-Cloud-Sticky-Id=gcglmiz9qx2x0gbi9pcm0g; Path=/",
+      "Vary" : [ "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers" ],
+      "Pragma" : "no-cache",
+      "Expires" : "0",
+      "X-XSS-Protection" : "0",
+      "Sozu-Id" : "01JYSMQ8M0AR4ADV5W40RT2KJ7",
+      "Date" : "Fri, 27 Jun 2025 21:29:28 GMT",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "02569e6d-eb17-4bff-a0bb-ed17d131e545",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

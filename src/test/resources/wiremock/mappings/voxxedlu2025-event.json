@@ -1,0 +1,40 @@
+{
+  "id" : "d2143cf8-d403-46bf-b42b-afe47e4041f8",
+  "name" : "api_public_event",
+  "request" : {
+    "url" : "/api/public/event",
+    "method" : "GET",
+    "headers" : {
+      "X-Portal-Name" : {
+        "equalTo" : "voxxedlu2025"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      },
+      "User-Agent" : {
+        "equalTo" : "Quarkus REST Client"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"id\":1151,\"slug\":\"voxxedlu2025\",\"name\":\"Voxxed Days Luxembourg 2025\",\"description\":\"Voxxed Days Luxembourg est de retour et va accueillir 500 participants pendant 2 jours de fun et de contenu gratifiant. Les développeurs peuvent s’attendre à des présentations de qualité sur les technologies par des orateurs de haut niveau. Voxxed Days Luxembourg est organisé par l’ASBL YaJUG (Java User Group de Luxembourg).\",\"tenant\":{\"id\":1,\"name\":\"YaJUG A.S.B.L.\"},\"codeOfConduct\":null,\"website\":\"https://luxembourg.voxxeddays.com\",\"twitterHandle\":\"@voxxed_lu\",\"fromDate\":\"2025-06-19T06:30:00Z\",\"toDate\":\"2025-06-20T11:00:00Z\",\"flickrURL\":\"https://www.flickr.com/photos/voxxed_lu/\",\"youTubeURL\":\"https://youtube.com/voxxeddaysluxembourg\",\"live\":false,\"theme\":\"VOXXED\",\"myBadgeActive\":null,\"cfpOpening\":\"2025-02-16T22:30:50Z\",\"cfpClosing\":\"2025-04-06T21:59:00Z\",\"eventImageURL\":\"https://luxembourg.voxxeddays.com/images/logo-big.png\",\"maxDescriptionLength\":1500,\"maxTitleLength\":200,\"maxProposals\":5,\"proposalLanguages\":[{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"},{\"id\":46,\"alpha2\":\"fr\",\"name\":\"French\",\"flag32\":\"FR-32.png\"}],\"websiteLanguage\":{\"id\":46,\"alpha2\":\"fr\",\"name\":\"French\",\"flag32\":\"FR-32.png\"},\"sessionTypes\":[],\"tracks\":[],\"location\":{\"id\":1101,\"name\":\"Casino 2000\"},\"locationId\":1101,\"locationName\":\"Casino 2000\",\"locationAddress\":\"\",\"locationCity\":\"Mondorf-les-Bains\",\"locationCountry\":\"Luxembourg\",\"timezone\":\"Europe/Brussels\",\"venueLongitude\":6.279,\"venueLatitude\":49.508,\"enableTags\":false}",
+    "headers" : {
+      "X-Content-Type-Options" : "nosniff",
+      "Pragma" : "no-cache",
+      "Sozu-Id" : "01JYSMM6PWPV24PFN5GRP3YVYP",
+      "Date" : "Fri, 27 Jun 2025 21:27:47 GMT",
+      "X-Frame-Options" : "DENY",
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "ETag" : "\"1151\"",
+      "Set-Cookie" : "X-Clever-Cloud-Sticky-Id=iuiabbeeqx2r5n4jou1amw; Path=/",
+      "Vary" : [ "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers" ],
+      "Expires" : "0",
+      "X-XSS-Protection" : "0",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "d2143cf8-d403-46bf-b42b-afe47e4041f8",
+  "persistent" : true,
+  "insertionIndex" : 2
+}

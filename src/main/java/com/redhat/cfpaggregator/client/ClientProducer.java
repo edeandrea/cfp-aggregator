@@ -28,6 +28,7 @@ import io.smallrye.common.annotation.Identifier;
 @ApplicationScoped
 public class ClientProducer {
   public static final String CFP_DEV_CLIENTS = "cfpDevClients";
+  public static final String PORTAL_NAME_HEADER = "X-Portal-Name";
   private final CfpPortalsConfig cfpPortalsConfig;
 
   public ClientProducer(CfpPortalsConfig cfpPortalsConfig) {

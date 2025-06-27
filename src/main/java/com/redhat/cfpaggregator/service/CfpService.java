@@ -98,11 +98,11 @@ public class CfpService {
     // The object model from cfp.dev is a bit backwards
     // You search for talks, which have references to speakers
     // We are flipping the model
-    var eventDetails = client.getEventDetails();
+    var eventDetails = client.getEventDetails(portalName);
     var event = this.eventMapper.fromCfpDev(portalName, portalConfig.portalType(), eventDetails);
 
     if (eventDetails != null) {
-      var talks = client.findTalks(searchCriteria);
+      var talks = client.findTalks(searchCriteria, portalName);
 
       if (talks != null) {
         var uniqueSpeakers = talks.stream()

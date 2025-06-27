@@ -1,0 +1,40 @@
+{
+  "id" : "f3b57433-88d6-4601-b057-624264e6620f",
+  "name" : "api_public_event",
+  "request" : {
+    "url" : "/api/public/event",
+    "method" : "GET",
+    "headers" : {
+      "X-Portal-Name" : {
+        "equalTo" : "vdams25"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      },
+      "User-Agent" : {
+        "equalTo" : "Quarkus REST Client"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"id\":1151,\"slug\":\"vdams25\",\"name\":\"Voxxed Days Amsterdam\",\"description\":\"Voxxed Days Amsterdam, a developer first conference hosted by @CodeLabJUG\",\"tenant\":{\"id\":1,\"name\":\"CodeLab B.V.\"},\"codeOfConduct\":null,\"website\":\"https://amsterdam.voxxeddays.com\",\"twitterHandle\":\"@VoxxedAmsterdam\",\"fromDate\":\"2025-04-03T06:30:00Z\",\"toDate\":\"2025-04-03T17:00:00Z\",\"flickrURL\":\"\",\"youTubeURL\":\"\",\"live\":false,\"theme\":\"VOXXED\",\"myBadgeActive\":null,\"cfpOpening\":\"2024-10-08T07:30:00Z\",\"cfpClosing\":\"2024-12-20T22:59:00Z\",\"eventImageURL\":\"\",\"maxDescriptionLength\":1500,\"maxTitleLength\":200,\"maxProposals\":3,\"proposalLanguages\":[{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"}],\"websiteLanguage\":{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"},\"sessionTypes\":[],\"tracks\":[],\"location\":{\"id\":1101,\"name\":\"Pathé Amsterdam Noord\"},\"locationId\":1101,\"locationName\":\"Pathé Amsterdam Noord\",\"locationAddress\":\"Buikslotermeerplein 2003\",\"locationCity\":\"Amsterdam\",\"locationCountry\":\"Netherlands\",\"timezone\":\"Europe/Brussels\",\"venueLongitude\":4.932,\"venueLatitude\":52.401,\"enableTags\":false}",
+    "headers" : {
+      "X-Content-Type-Options" : "nosniff",
+      "Pragma" : "no-cache",
+      "Sozu-Id" : "01JYSMS1NTW661QTF37ZX1AR3S",
+      "Date" : "Fri, 27 Jun 2025 21:30:26 GMT",
+      "X-Frame-Options" : "DENY",
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "ETag" : "\"1151\"",
+      "Set-Cookie" : "X-Clever-Cloud-Sticky-Id=qetbdi3iskyav7arp8ftua; Path=/",
+      "Vary" : [ "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers" ],
+      "Expires" : "0",
+      "X-XSS-Protection" : "0",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "f3b57433-88d6-4601-b057-624264e6620f",
+  "persistent" : true,
+  "insertionIndex" : 2
+}

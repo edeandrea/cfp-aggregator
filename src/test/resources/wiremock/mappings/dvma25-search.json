@@ -1,0 +1,39 @@
+{
+  "id" : "ff40416d-d99c-47c8-81c2-f99f5e3f842b",
+  "name" : "api_public_search_quarkus",
+  "request" : {
+    "url" : "/api/public/search/Quarkus",
+    "method" : "GET",
+    "headers" : {
+      "X-Portal-Name" : {
+        "equalTo" : "dvma25"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      },
+      "User-Agent" : {
+        "equalTo" : "Quarkus REST Client"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"searchQuery\":\"quarkus\",\"proposals\":[],\"speakers\":[]}",
+    "headers" : {
+      "X-Frame-Options" : "DENY",
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "X-Clever-Cloud-Sticky-Id=kuqr3av9tgitj14fsyruna; Path=/",
+      "Vary" : [ "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers" ],
+      "Pragma" : "no-cache",
+      "Expires" : "0",
+      "X-XSS-Protection" : "0",
+      "Sozu-Id" : "01JYSMXHKMYKFB1B0TS8ZAZ3BS",
+      "Date" : "Fri, 27 Jun 2025 21:32:53 GMT",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "ff40416d-d99c-47c8-81c2-f99f5e3f842b",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

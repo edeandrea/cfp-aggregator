@@ -1,0 +1,40 @@
+{
+  "id" : "393723a3-cbd1-4523-983e-45751a7969ab",
+  "name" : "api_public_event",
+  "request" : {
+    "url" : "/api/public/event",
+    "method" : "GET",
+    "headers" : {
+      "X-Portal-Name" : {
+        "equalTo" : "devoxxfr2025"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      },
+      "User-Agent" : {
+        "equalTo" : "Quarkus REST Client"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"id\":1151,\"slug\":\"devoxxfr2025\",\"name\":\"Devoxx France 2025\",\"description\":\"13ème édition, Paris\",\"tenant\":{\"id\":1,\"name\":\"Quantixx SARL \"},\"codeOfConduct\":null,\"website\":\"https://devoxx.fr\",\"twitterHandle\":\"@DevoxxFR\",\"fromDate\":\"2025-04-16T05:30:00Z\",\"toDate\":\"2025-04-18T16:30:00Z\",\"flickrURL\":\"https://www.flickr.com/photos/147442451@N05/\",\"youTubeURL\":\"https://www.youtube.com/@DevoxxFRvideos\",\"live\":false,\"theme\":\"DEVOXX\",\"myBadgeActive\":null,\"cfpOpening\":\"2024-11-25T06:00:26Z\",\"cfpClosing\":\"2025-01-12T22:59:26Z\",\"eventImageURL\":\"https://www.devoxx.fr/wp-content/uploads/2024/09/Leonardo_Kino_XL_Photo_dun_microphone_des_annes_50_en_aluminiu_0-1.jpg\",\"maxDescriptionLength\":1200,\"maxTitleLength\":80,\"maxProposals\":3,\"proposalLanguages\":[{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"},{\"id\":46,\"alpha2\":\"fr\",\"name\":\"French\",\"flag32\":\"FR-32.png\"}],\"websiteLanguage\":{\"id\":46,\"alpha2\":\"fr\",\"name\":\"French\",\"flag32\":\"FR-32.png\"},\"sessionTypes\":[],\"tracks\":[],\"location\":{\"id\":1101,\"name\":\"Palais des Congrès\"},\"locationId\":1101,\"locationName\":\"Palais des Congrès\",\"locationAddress\":\"2 Place de la Porte Maillot\",\"locationCity\":\"Paris\",\"locationCountry\":\"France\",\"timezone\":\"Europe/Paris\",\"venueLongitude\":2.284,\"venueLatitude\":48.879,\"enableTags\":false}",
+    "headers" : {
+      "X-Content-Type-Options" : "nosniff",
+      "Pragma" : "no-cache",
+      "Sozu-Id" : "01JYSMNDBNFS5HRCR0NJHZB6SB",
+      "Date" : "Fri, 27 Jun 2025 21:28:27 GMT",
+      "X-Frame-Options" : "DENY",
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "ETag" : "\"1151\"",
+      "Set-Cookie" : "X-Clever-Cloud-Sticky-Id=2b6urigiqckghiw0nczqgw; Path=/",
+      "Vary" : [ "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers" ],
+      "Expires" : "0",
+      "X-XSS-Protection" : "0",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "393723a3-cbd1-4523-983e-45751a7969ab",
+  "persistent" : true,
+  "insertionIndex" : 2
+}

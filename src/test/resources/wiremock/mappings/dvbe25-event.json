@@ -1,0 +1,40 @@
+{
+  "id" : "7b2a84c6-3d78-4354-8538-a63f5c810d80",
+  "name" : "api_public_event",
+  "request" : {
+    "url" : "/api/public/event",
+    "method" : "GET",
+    "headers" : {
+      "X-Portal-Name" : {
+        "equalTo" : "dvbe25"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      },
+      "User-Agent" : {
+        "equalTo" : "Quarkus REST Client"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"id\":1151,\"slug\":\"dvbe25\",\"name\":\"Devoxx Belgium 2025\",\"description\":null,\"tenant\":{\"id\":1,\"name\":\"The Java Community BV\"},\"codeOfConduct\":null,\"website\":\"https://devoxx.be\",\"twitterHandle\":\"@devoxx\",\"fromDate\":\"2025-10-06T06:30:00Z\",\"toDate\":\"2025-10-10T11:00:00Z\",\"flickrURL\":\"\",\"youTubeURL\":\"\",\"live\":true,\"theme\":\"DEVOXX\",\"myBadgeActive\":null,\"cfpOpening\":\"2025-06-02T03:00:00Z\",\"cfpClosing\":\"2025-07-18T21:59:00Z\",\"eventImageURL\":\"https://devoxx.be/wp-content/uploads/2025/05/devoxx_be_2025.jpg\",\"maxDescriptionLength\":1500,\"maxTitleLength\":200,\"maxProposals\":3,\"proposalLanguages\":[],\"websiteLanguage\":{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"},\"sessionTypes\":[],\"tracks\":[],\"location\":{\"id\":1101,\"name\":\"Kinepolis\"},\"locationId\":1101,\"locationName\":\"Kinepolis\",\"locationAddress\":\"\",\"locationCity\":\"Antwerp\",\"locationCountry\":\"Belgium\",\"timezone\":\"Europe/Brussels\",\"venueLongitude\":4.4140204,\"venueLatitude\":51.2459115,\"enableTags\":false}",
+    "headers" : {
+      "X-Content-Type-Options" : "nosniff",
+      "Pragma" : "no-cache",
+      "Sozu-Id" : "01JYSMW1E6BS12AB1DFKYBNBS3",
+      "Date" : "Fri, 27 Jun 2025 21:32:04 GMT",
+      "X-Frame-Options" : "DENY",
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "ETag" : "\"1151\"",
+      "Set-Cookie" : "X-Clever-Cloud-Sticky-Id=hu6qfdcxsewl71nug_qxfw; Path=/",
+      "Vary" : [ "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers" ],
+      "Expires" : "0",
+      "X-XSS-Protection" : "0",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "7b2a84c6-3d78-4354-8538-a63f5c810d80",
+  "persistent" : true,
+  "insertionIndex" : 2
+}

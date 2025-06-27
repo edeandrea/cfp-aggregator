@@ -1,0 +1,40 @@
+{
+  "id" : "df05a1b9-498b-4f2b-8d3a-5f026c55b2c5",
+  "name" : "api_public_event",
+  "request" : {
+    "url" : "/api/public/event",
+    "method" : "GET",
+    "headers" : {
+      "X-Portal-Name" : {
+        "equalTo" : "vdbuh2025"
+      },
+      "Accept" : {
+        "equalTo" : "application/json"
+      },
+      "User-Agent" : {
+        "equalTo" : "Quarkus REST Client"
+      }
+    }
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"id\":1151,\"slug\":\"vdbuh2025\",\"name\":\"Voxxed Days Bucharest\",\"description\":\"Workshops Day - 26 March 2025 Conference Day - 27 March 2025\",\"tenant\":{\"id\":1,\"name\":\"incComm\"},\"codeOfConduct\":null,\"website\":\"https://romania.voxxeddays.com/voxxed-days-bucharest-2025/\",\"twitterHandle\":\"@voxxedbucharest\",\"fromDate\":\"2025-03-27T06:30:00Z\",\"toDate\":\"2025-03-27T17:00:00Z\",\"flickrURL\":\"\",\"youTubeURL\":\"\",\"live\":true,\"theme\":\"VOXXED\",\"myBadgeActive\":null,\"cfpOpening\":\"2024-07-11T08:37:31Z\",\"cfpClosing\":\"2025-01-31T09:37:31Z\",\"eventImageURL\":\"\",\"maxDescriptionLength\":1500,\"maxTitleLength\":200,\"maxProposals\":3,\"proposalLanguages\":[{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"}],\"websiteLanguage\":{\"id\":39,\"alpha2\":\"en\",\"name\":\"English\",\"flag32\":\"GB-32.png\"},\"sessionTypes\":[],\"tracks\":[],\"location\":{\"id\":1101,\"name\":\"Bucharest\"},\"locationId\":1101,\"locationName\":\"Bucharest\",\"locationAddress\":\"\",\"locationCity\":\"Bucharest\",\"locationCountry\":\"Romania\",\"timezone\":\"Europe/Bucharest\",\"venueLongitude\":4.4140204,\"venueLatitude\":51.2459115,\"enableTags\":false}",
+    "headers" : {
+      "X-Content-Type-Options" : "nosniff",
+      "Pragma" : "no-cache",
+      "Sozu-Id" : "01JYSMTV39W99JQ1T0AXJZT7E8",
+      "Date" : "Fri, 27 Jun 2025 21:31:25 GMT",
+      "X-Frame-Options" : "DENY",
+      "Cache-Control" : "no-cache, no-store, max-age=0, must-revalidate",
+      "ETag" : "\"1151\"",
+      "Set-Cookie" : "X-Clever-Cloud-Sticky-Id=jevxflqutaqjscgezp0bcg; Path=/",
+      "Vary" : [ "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers" ],
+      "Expires" : "0",
+      "X-XSS-Protection" : "0",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "df05a1b9-498b-4f2b-8d3a-5f026c55b2c5",
+  "persistent" : true,
+  "insertionIndex" : 2
+}

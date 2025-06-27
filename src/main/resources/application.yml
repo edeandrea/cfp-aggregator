@@ -41,6 +41,9 @@ cfps:
   log-responses: true
 
 quarkus:
+  application:
+    name: cfp-aggregator
+
   # Flyway
   flyway:
 #    baseline-at-start: true
@@ -58,11 +61,18 @@ quarkus:
     cors:
       enabled: true
       origins: '*'
+    test-port: 0
   dev-ui:
     cors:
       enabled: true
   tls:
     trust-all: true
+
+  # Rest config
+  rest:
+    jackson:
+      optimization:
+        enable-reflection-free-serializers: true
 
   # Hibernate
   hibernate-orm:
@@ -86,17 +96,48 @@ quarkus:
     jdbc:
       telemetry: true
 
-  # Wiremock
-  wiremock:
-    devservices:
-      enabled: false
-
 # Dev and test modes config
 '%dev,test':
+  cfps:
+    portals:
+      devoxxuk2025:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx UK 2025
+      devoxxpl25:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx Poland 2025
+      voxxedlu2025:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Voxxed Days Luxembourg 2025
+      devoxxfr2025:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx France 2025
+      dvgr25:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx Greece 2025
+      vdams25:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Voxxed Days Amsterdam 2025
+      vdbuh2025:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Voxxed Days Bucharest 2025
+      dvbe25:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx Belgium 2025
+      dvma25:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx Morocco 2025
+
   quarkus:
-    otel:
-      logs:
-        enabled: false
     observability:
       enabled: false
     micrometer:
@@ -107,10 +148,15 @@ quarkus:
       category:
         'com.redhat':
           level: DEBUG
+        'io.quarkiverse.wiremock.devservice.WireMockServer':
+          level: WARN
       console:
         level: DEBUG
     flyway:
       clean-at-start: true
+    wiremock:
+      devservices:
+        files-mapping: src/test/resources/wiremock
 
 # test mode config
 '%test':

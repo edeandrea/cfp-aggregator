@@ -9,6 +9,11 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
+import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
+
+import io.quarkus.rest.client.reactive.NotBody;
+
+import com.redhat.cfpaggregator.client.ClientProducer;
 import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
 
 /**
@@ -20,12 +25,14 @@ import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public interface CfpDevClient {
+
   /**
    * Fetches the details of an event from the cfp.dev API.
    */
   @GET
   @Path("/event")
-  CfpDevEventDetails getEventDetails();
+  @ClientHeaderParam(name = ClientProducer.PORTAL_NAME_HEADER, value = "{portalName}")
+  CfpDevEventDetails getEventDetails(@NotBody String portalName);
 
   /**
    * Searches for talks based on the specified search query.
@@ -36,7 +43,8 @@ public interface CfpDevClient {
    */
   @GET
   @Path("/search/{searchQuery}")
-  CfpDevTalkSearchResults findTalks(@PathParam("searchQuery") String searchQuery);
+  @ClientHeaderParam(name = ClientProducer.PORTAL_NAME_HEADER, value = "{portalName}")
+  CfpDevTalkSearchResults findTalks(@PathParam("searchQuery") String searchQuery, @NotBody String portalName);
 
   /**
    * Retrieves a list of all talk details available from the cfp.dev API.
@@ -45,7 +53,8 @@ public interface CfpDevClient {
    */
   @GET
   @Path("/talks")
-  List<CfpDevTalkDetails> getAllTalks();
+  @ClientHeaderParam(name = ClientProducer.PORTAL_NAME_HEADER, value = "{portalName}")
+  List<CfpDevTalkDetails> getAllTalks(@NotBody String portalName);
 
   /**
    * Searches for talks based on the specified search criteria, including talk keywords and speaker companies.
@@ -55,12 +64,12 @@ public interface CfpDevClient {
    * @param searchCriteria the search criteria containing talk keywords and speaker companies for filtering the results
    * @return a list of {@code CfpDevTalkDetails} objects that match the search criteria
    */
-  default List<CfpDevTalkDetails> findTalks(TalkSearchCriteria searchCriteria) {
+  default List<CfpDevTalkDetails> findTalks(TalkSearchCriteria searchCriteria, String portalName) {
     // 1) Find all the talks for each keyword (if there are any)
     var talksStream = searchCriteria.hasTalkKeywords() ?
         searchCriteria.getTalkKeywords().stream()
-            .flatMap(keyword -> findTalks(keyword).talks().stream()) :
-        getAllTalks().stream();
+            .flatMap(keyword -> findTalks(keyword, portalName).talks().stream()) :
+        getAllTalks(portalName).stream();
 
     // 2) For each talk, only retain the speakers that match the search criteria (if there is any)
     return searchCriteria.hasSpeakerCompanies() ?
