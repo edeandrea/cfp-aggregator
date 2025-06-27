@@ -103,6 +103,8 @@ quarkus:
       export:
         otlp:
           enabled: "${%test.quarkus.observability.enabled}"
+  cfps:
+    reload-on-startup: false
 
 '%dev':
   quarkus:

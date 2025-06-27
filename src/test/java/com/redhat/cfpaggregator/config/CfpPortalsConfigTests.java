@@ -66,7 +66,7 @@ class CfpPortalsConfigTests {
                     PortalType.SESSIONIZE,
                     Optional.of("CFP Portal 2"),
                     true,
-                    false,
+                    true,
                     Duration.ofMinutes(10)
                 )
         )
