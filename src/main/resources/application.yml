@@ -8,6 +8,34 @@ cfps:
       base-url: https://devoxxpl25.cfp.dev
       portal-type: cfp-dev
       description: Devoxx Poland 2025
+    voxxedlu2025:
+      base-url: https://voxxedlu2025.cfp.dev
+      portal-type: cfp-dev
+      description: Voxxed Days Luxembourg 2025
+    devoxxfr2025:
+      base-url: https://devoxxfr2025.cfp.dev
+      portal-type: cfp-dev
+      description: Devoxx France 2025
+    dvgr25:
+      base-url: https://dvgr25.cfp.dev
+      portal-type: cfp-dev
+      description: Devoxx Greece 2025
+    vdams25:
+      base-url: https://vdams25.cfp.dev
+      portal-type: cfp-dev
+      description: Voxxed Days Amsterdam 2025
+    vdbuh2025:
+      base-url: https://vdbuh2025.cfp.dev
+      portal-type: cfp-dev
+      description: Voxxed Days Bucharest 2025
+    dvbe25:
+      base-url: https://dvbe25.cfp.dev
+      portal-type: cfp-dev
+      description: Devoxx Belgium 2025
+    dvma25:
+      base-url: https://dvma25.cfp.dev
+      portal-type: cfp-dev
+      description: Devoxx Morocco 2025
   reload-on-startup: true
   log-requests: true
   log-responses: true

@@ -96,6 +96,22 @@ public class Event {
     return cloneAsNewWithNewSpeakers();
   }
 
+  /**
+   * Gets the number of speakers at this event
+   */
+  public int getSpeakerCount() {
+    return this.speakers.size();
+  }
+
+  /**
+   * Gets the combined number of talks across all speakers in this event
+   */
+  public int getTalkCount() {
+    return this.speakers.stream()
+        .mapToInt(Speaker::getTalkCount)
+        .sum();
+  }
+
   public Event cloneAsNewWithNewSpeakers(Speaker... speakers) {
     return toBuilder()
         .speakers(speakers)

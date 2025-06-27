@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -111,6 +112,17 @@ public class Speaker {
     return cloneAsNewWithNewEvent(null);
   }
 
+  /**
+   * Gets the number of talks by this speaker for a given event
+   */
+  public int getTalkCount() {
+    return this.talks.size();
+  }
+
+  public String getFullName() {
+    return "%s %s".formatted(this.firstName, this.lastName);
+  }
+
   public Speaker cloneAsNewWithNewEvent(Event event) {
     return toBuilder()
         .id(null)
@@ -152,6 +164,10 @@ public class Speaker {
         ", blueskyUsername='" + blueskyUsername + '\'' +
         ", countryName='" + countryName + '\'' +
         ", bio='" + bio + '\'' +
+        Optional.ofNullable(event)
+            .map(Event::getPortalName)
+            .map(portalName -> ", eventPortalName=" + portalName)
+            .orElse("") +
         ", eventPortalName=" + event.getPortalName() +
         ", talks=" + talks +
         '}';

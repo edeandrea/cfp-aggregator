@@ -43,7 +43,7 @@ class EventMapperTests {
         .flickrUrl(eventDetails.flickrUrl().toString())
         .fromDate(eventDetails.fromDate())
         .name(eventDetails.name())
-        .timeZone(eventDetails.timeZone().getDisplayName())
+        .timeZone(eventDetails.timeZone().getID())
         .toDate(eventDetails.toDate())
         .websiteUrl(eventDetails.websiteUrl().toString())
         .youTubeUrl(eventDetails.youTubeUrl().toString())

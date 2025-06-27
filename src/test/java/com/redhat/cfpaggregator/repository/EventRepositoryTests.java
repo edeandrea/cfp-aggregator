@@ -69,5 +69,7 @@ class EventRepositoryTests extends BaseRepositoryTests {
         .isEqualTo(SPEAKER);
 
     assertThat(firstEvent.getSpeakers().getFirst().getId()).isPositive();
+    assertThat(event.getSpeakerCount()).isOne();
+    assertThat(event.getTalkCount()).isZero();
   }
 }

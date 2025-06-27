@@ -19,7 +19,7 @@ public interface EventMapper {
 
   default String fromTimeZone(TimeZone timeZone) {
     return Optional.ofNullable(timeZone)
-        .map(TimeZone::getDisplayName)
+        .map(TimeZone::getID)
         .orElse(null);
   }
 }

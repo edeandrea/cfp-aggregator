@@ -42,6 +42,8 @@ class TalkRepositoryTests extends BaseRepositoryTests {
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isOne();
     assertThat(this.talkRepository.count()).isOne();
+    assertThat(event.getSpeakerCount()).isOne();
+    assertThat(event.getTalkCount()).isOne();
 
     var speakers = this.speakerRepository.listAll();
     assertThat(speakers)
@@ -52,6 +54,7 @@ class TalkRepositoryTests extends BaseRepositoryTests {
         .isEqualTo(SPEAKER);
 
     var firstSpeaker = speakers.getFirst();
+    assertThat(firstSpeaker.getTalkCount()).isOne();
     assertThat(firstSpeaker.getTalks())
         .singleElement()
         .usingRecursiveComparison()

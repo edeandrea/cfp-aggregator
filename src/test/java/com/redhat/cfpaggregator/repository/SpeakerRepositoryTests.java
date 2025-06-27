@@ -28,6 +28,8 @@ class SpeakerRepositoryTests extends BaseRepositoryTests {
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isOne();
     assertThat(this.talkRepository.count()).isZero();
+    assertThat(event.getSpeakerCount()).isOne();
+    assertThat(event.getTalkCount()).isZero();
 
     var speakers = this.speakerRepository.listAll();
     assertThat(speakers)
@@ -45,5 +47,6 @@ class SpeakerRepositoryTests extends BaseRepositoryTests {
         .ignoringFields("id", "speakers")
         .isEqualTo(EVENT);
     assertThat(firstSpeaker.getTalks()).isEmpty();
+    assertThat(firstSpeaker.getTalkCount()).isZero();
   }
 }

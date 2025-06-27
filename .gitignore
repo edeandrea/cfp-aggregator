@@ -43,3 +43,16 @@ nb-configuration.xml
 /.quarkus/cli/plugins/
 # TLS Certificates
 .certs/
+
+# The following files are generated/updated by vaadin-maven-plugin
+node_modules/
+src/main/frontend/generated/
+src/main/bundles
+pnpmfile.js
+vite.generated.ts
+vite.config.ts
+types.d.ts
+tsconfig.json
+package-lock.json
+package.json
+webpack.generated.js

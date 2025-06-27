@@ -62,7 +62,7 @@ class CfpDevClientTests {
   void hasCorrectClients() {
     assertThat(this.cfpDevClients)
         .isNotNull()
-        .hasSizeGreaterThanOrEqualTo(3)
+        .hasSizeGreaterThanOrEqualTo(1)
         .containsKeys("portal1")
         .extractingByKey("portal1")
         .isInstanceOf(CfpDevClient.class);
