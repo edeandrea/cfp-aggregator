@@ -16,7 +16,7 @@ import com.redhat.cfpaggregator.domain.Talk;
 import com.redhat.cfpaggregator.service.CfpService;
 import com.redhat.cfpaggregator.ui.components.BoldSpan;
 import com.redhat.cfpaggregator.ui.views.EventViews.EventName;
-import com.vaadin.flow.component.Composite;
+import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.details.DetailsVariant;
@@ -26,8 +26,6 @@ import com.vaadin.flow.component.html.AnchorTarget;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
-import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.Scroller.ScrollDirection;
@@ -40,10 +38,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 
-@PageTitle( "CFP Aggregator")
+@PageTitle("CFP Aggregator")
 @Route("")
 @Menu(order = 0, icon = LineAwesomeIconUrl.PENCIL_RULER_SOLID)
-public class MainView extends Composite<VerticalLayout> {
+public class MainView extends VerticalLayout {
   private static final DateTimeFormatter M_D_Y_FORMATTER = DateTimeFormatter.ofPattern("MMMM d, yyyy");
   private static final DateTimeFormatter M_Y_FORMATTER = DateTimeFormatter.ofPattern("MMMM yyyy");
   private final CfpService cfpService;
@@ -55,11 +53,11 @@ public class MainView extends Composite<VerticalLayout> {
     this.cfpService = cfpService;
     this.config = config;
 
-    getContent().setSizeFull();
-    getContent().getStyle().set("flex-grow", "1");
-    getContent().add(createTitleRow());
-    getContent().add(new Hr());
-    getContent().add(createMainBody());
+    setSizeFull();
+    getStyle().set("flex-grow", "1");
+    add(createTitleRow());
+    add(new Hr());
+    add(createMainBody());
   }
 
   private VerticalLayout createMainBody() {
@@ -228,12 +226,23 @@ public class MainView extends Composite<VerticalLayout> {
                   .set("white-space", "nowrap")
                   .set("overflow", "visible");
 
-              var valueSpan = val.startsWith("http") ?
+              var isLink = val.startsWith("http");
+              var isHtml = !isLink && containsHtmlTags(val);
+              var valComponent = isLink ?
                   new Anchor(val, val, AnchorTarget.BLANK) :
-                  new Span(val);
-              valueSpan.getStyle().set("white-space", "normal");
-              parent.addFormItem(valueSpan, labelSpan);
+                  isHtml ?
+                      new Html("<div>%s</div>".formatted(val)) :
+                      new Span(val);
+
+              valComponent.getStyle().set("white-space", "normal");
+              parent.addFormItem(valComponent, labelSpan);
             }
         );
+  }
+
+  public static boolean containsHtmlTags(String text) {
+    return Optional.ofNullable(text)
+        .map(t -> t.matches(".*<[^>]+>.*"))
+        .orElse(false);
   }
 }
