@@ -1,9 +1,12 @@
 package com.redhat.cfpaggregator.repository;
 
+import java.util.Collection;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.logging.Log;
 
 import com.redhat.cfpaggregator.domain.Event;
 import com.redhat.cfpaggregator.domain.Speaker;
@@ -32,14 +35,6 @@ public class EventRepository implements PanacheRepositoryBase<Event, String> {
    * Deletes all {@link Event} entities from the repository and cascades the operation
    * to related entities such as {@link Speaker} and {@link Talk}.
    *
-   * This method retrieves all {@link Event} entities, extracts their portal names,
-   * and deletes each corresponding entity using their identifiers. The deletion
-   * process ensures that related entities, such as speakers and talks associated
-   * with the events, are also removed.
-   *
-   * The method leverages projection and streams for efficient processing and
-   * simplifies cascading deletion of associated data.
-   *
    * It is recommended to use this method in scenarios where all events and their
    * associated data need to be removed.
    */
@@ -52,5 +47,17 @@ public class EventRepository implements PanacheRepositoryBase<Event, String> {
           .map(PortalName::portalName)
           .forEach(this::deleteById);
     }
+  }
+
+  /**
+   * Persists a collection of {@link Event} entities to the data repository.
+   *
+   * @param events the collection of {@link Event} entities to be persisted
+   */
+  public void saveEvents(Collection<Event> events) {
+    events.forEach(event -> {
+      persist(event);
+      Log.debugf("Persisted event:\n%s", event);
+    });
   }
 }

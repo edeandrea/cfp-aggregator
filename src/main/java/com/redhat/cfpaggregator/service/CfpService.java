@@ -82,22 +82,29 @@ public class CfpService {
     // Let's parallelize this
     var unis = this.cfpDevClients.entrySet()
         .stream()
-        .map(entry -> createEvent(entry.getKey(), this.config.portals().get(entry.getKey()), entry.getValue(), searchCriteria))
-        .map(Uni.createFrom()::item)
+        .map(entry ->
+            Uni.createFrom()
+                .item(() ->
+                    createEvent(entry.getKey(), this.config.portals().get(entry.getKey()), entry.getValue(), searchCriteria)
+                )
+                .runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
+        )
         .toList();
 
-    Uni.join()
+    var events = Uni.join()
         .all(unis)
         .andFailFast()
-        .emitOn(Infrastructure.getDefaultWorkerPool())
-        .invoke(() -> Log.info("Successfully created events"))
         .await().atMost(this.config.timeout().multipliedBy(this.config.portalNames().size()));
+
+    this.eventRepository.saveEvents(events);
+    Log.info("Successfully created events");
   }
 
   private Event createEvent(String portalName, CfpPortalConfig portalConfig, CfpDevClient client, TalkSearchCriteria searchCriteria) {
     // The object model from cfp.dev is a bit backwards
     // You search for talks, which have references to speakers
     // We are flipping the model
+    Log.debugf("Creating event for portal %s", portalName);
     var eventDetails = client.getEventDetails(portalName);
     var event = this.eventMapper.fromCfpDev(portalName, portalConfig.portalType(), eventDetails);
 
@@ -127,9 +134,6 @@ public class CfpService {
         });
       }
     }
-
-    this.eventRepository.persist(event);
-    Log.debugf("Persisted event:\n%s", event);
 
     return event;
   }
