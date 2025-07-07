@@ -1,14 +1,12 @@
 package com.redhat.cfpaggregator.repository;
 
-import java.util.Collection;
-
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import io.quarkus.logging.Log;
 
 import com.redhat.cfpaggregator.domain.Event;
+import com.redhat.cfpaggregator.domain.Portal;
 import com.redhat.cfpaggregator.domain.Speaker;
 import com.redhat.cfpaggregator.domain.Talk;
 
@@ -29,7 +27,7 @@ import com.redhat.cfpaggregator.domain.Talk;
 @ApplicationScoped
 @Transactional
 public class EventRepository implements PanacheRepositoryBase<Event, String> {
-  private record PortalName(String portalName) {}
+  private record PortalEntity(Portal portal) {};
 
   /**
    * Deletes all {@link Event} entities from the repository and cascades the operation
@@ -41,23 +39,13 @@ public class EventRepository implements PanacheRepositoryBase<Event, String> {
   public void deleteAllWithCascade() {
     if (count() > 0) {
       findAll()
-          .project(PortalName.class)
+          .project(PortalEntity.class)
           .list()
           .stream()
-          .map(PortalName::portalName)
-          .forEach(this::deleteById);
+          .forEach(portal -> {
+            portal.portal().setEvent(null);
+            deleteById(portal.portal().getPortalName());
+          });
     }
-  }
-
-  /**
-   * Persists a collection of {@link Event} entities to the data repository.
-   *
-   * @param events the collection of {@link Event} entities to be persisted
-   */
-  public void saveEvents(Collection<Event> events) {
-    events.forEach(event -> {
-      persist(event);
-      Log.debugf("Persisted event:\n%s", event);
-    });
   }
 }

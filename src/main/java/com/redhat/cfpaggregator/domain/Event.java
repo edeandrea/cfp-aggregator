@@ -9,16 +9,14 @@ import java.util.Objects;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-
-import com.redhat.cfpaggregator.config.CfpPortalsConfig.PortalType;
 
 /**
  * Represents an event entity with associated information such as name, description,
@@ -30,6 +28,7 @@ import com.redhat.cfpaggregator.config.CfpPortalsConfig.PortalType;
 @Table(name = "events")
 public class Event {
   @Id
+  @Column(name = "portal_name")
   private String portalName;
 
   @NotEmpty(message = "name can not be null or empty")
@@ -47,9 +46,10 @@ public class Event {
   private Instant cfpOpening;
   private Instant cfpClosing;
 
-  @Enumerated(EnumType.STRING)
-  @NotNull(message = "portal_type can not be null")
-  private PortalType portalType;
+  @OneToOne
+  @MapsId
+  @JoinColumn(name = "portal_name")
+  private Portal portal;
 
   @OneToMany(
       mappedBy = "event",
@@ -74,9 +74,13 @@ public class Event {
     this.toDate = builder.toDate;
     this.websiteUrl = builder.websiteUrl;
     this.youTubeUrl = builder.youTubeUrl;
-    this.portalType = builder.portalType;
     this.cfpOpening = builder.cfpOpening;
     this.cfpClosing = builder.cfpClosing;
+    this.portal = builder.portal;
+
+    if (this.portal != null) {
+      this.portal.setEvent(this);
+    }
 
     if (builder.speakers != null) {
       this.speakers.addAll(builder.speakers);
@@ -201,12 +205,12 @@ public class Event {
     this.youTubeUrl = youTubeUrl;
   }
 
-  public PortalType getPortalType() {
-    return portalType;
+  public Portal getPortal() {
+    return portal;
   }
 
-  public void setPortalType(PortalType portalType) {
-    this.portalType = portalType;
+  public void setPortal(Portal portal) {
+    this.portal = portal;
   }
 
   public Instant getCfpOpening() {
@@ -237,9 +241,9 @@ public class Event {
         ", toDate=" + toDate +
         ", websiteUrl='" + websiteUrl + '\'' +
         ", youTubeUrl='" + youTubeUrl + '\'' +
-        ", portalType=" + portalType +
         ", cfpOpening=" + cfpOpening +
         ", cfpClosing=" + cfpClosing +
+        ", portal=" + (portal != null ? portal.getPortalName() : "null") +
         ", speakers=" + speakers +
         '}';
   }
@@ -284,7 +288,7 @@ public class Event {
     private Instant toDate;
     private String websiteUrl;
     private String youTubeUrl;
-    private PortalType portalType;
+    private Portal portal;
     private List<Speaker> speakers = new ArrayList<>();
     private Instant cfpOpening;
     private Instant cfpClosing;
@@ -302,7 +306,7 @@ public class Event {
       this.toDate = event.toDate;
       this.websiteUrl = event.websiteUrl;
       this.youTubeUrl = event.youTubeUrl;
-      this.portalType = event.portalType;
+      this.portal = event.portal;
       this.speakers = event.speakers;
       this.cfpOpening = event.cfpOpening;
       this.cfpClosing = event.cfpClosing;
@@ -353,8 +357,8 @@ public class Event {
       return this;
     }
 
-    public Builder portalType(PortalType portalType) {
-      this.portalType = portalType;
+    public Builder portal(Portal portal) {
+      this.portal = portal;
       return this;
     }
 

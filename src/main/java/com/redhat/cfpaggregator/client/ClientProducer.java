@@ -1,15 +1,12 @@
 package com.redhat.cfpaggregator.client;
 
-import static com.redhat.cfpaggregator.config.CfpPortalsConfig.CfpPortalConfig;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Produces;
 
 import org.jboss.resteasy.reactive.client.api.LoggingScope;
 
@@ -18,10 +15,11 @@ import io.quarkus.rest.client.reactive.QuarkusRestClientBuilder;
 
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevClient;
 import com.redhat.cfpaggregator.config.CfpPortalsConfig;
-import io.smallrye.common.annotation.Identifier;
+import com.redhat.cfpaggregator.domain.Portal;
+import com.redhat.cfpaggregator.repository.PortalRepository;
 
 /**
- * Produces instances of clients for communicating with the portals defined in {@link CfpPortalsConfig#portals()}.
+ * Produces instances of clients for communicating with portals.
  *
  * @author Eric Deandrea
  */
@@ -29,41 +27,42 @@ import io.smallrye.common.annotation.Identifier;
 public class ClientProducer {
   public static final String CFP_DEV_CLIENTS = "cfpDevClients";
   public static final String PORTAL_NAME_HEADER = "X-Portal-Name";
-  private final CfpPortalsConfig cfpPortalsConfig;
+  private final PortalRepository portalRepository;
+  private final CfpPortalsConfig config;
+  private Map<String, CfpDevClient> cfpDevClients = new ConcurrentHashMap<>();
 
-  public ClientProducer(CfpPortalsConfig cfpPortalsConfig) {
-    this.cfpPortalsConfig = cfpPortalsConfig;
+  public ClientProducer(PortalRepository portalRepository, CfpPortalsConfig config) {
+    this.portalRepository = portalRepository;
+    this.config = config;
   }
 
-  @Produces
-  @Identifier(CFP_DEV_CLIENTS)
-  public Map<String, CfpDevClient> cfpDevClients() {
-    return this.cfpPortalsConfig.portals()
-        .entrySet()
-        .stream()
-        .map(entry -> Map.entry(entry.getKey(), createCfpDevClient(entry.getKey(), entry.getValue())))
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+  public CfpDevClient getCfpDevClient(Portal portal) {
+    return this.cfpDevClients.computeIfAbsent(portal.getPortalName(), portalName -> createCfpDevClient(portal));
   }
 
-  private CfpDevClient createCfpDevClient(String portalName, CfpPortalConfig config) {
-    Log.debugf("Creating client for portal %s", portalName);
+  private CfpDevClient createCfpDevClient(Portal portal) {
+    Log.debugf("Creating client for portal %s", portal.getPortalName());
 
     try {
-      var builder = QuarkusRestClientBuilder.newBuilder()
-          .baseUrl(new URL(config.baseUrl()))
-          .connectTimeout(config.timeout().toSeconds(), TimeUnit.SECONDS)
-          .readTimeout(config.timeout().toSeconds(), TimeUnit.SECONDS);
-
-      if (config.logRequests() || config.logResponses()) {
-        builder
-            .loggingScope(LoggingScope.REQUEST_RESPONSE)
-            .clientLogger(new RestClientLogger(portalName, config.logRequests(), config.logResponses()));
-      }
-
-      return builder.build(CfpDevClient.class);
+      return createCfpDevClient(new URL(portal.getBaseUrl()), portal.getPortalName());
     }
     catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  private CfpDevClient createCfpDevClient(URL baseUrl, String portalName) {
+    var builder = QuarkusRestClientBuilder.newBuilder()
+        .baseUrl(baseUrl)
+        .connectTimeout(this.config.timeout().toSeconds(), TimeUnit.SECONDS)
+        .readTimeout(this.config.timeout().toSeconds(), TimeUnit.SECONDS);
+
+    if (this.config.logRequests() || this.config.logResponses()) {
+      builder
+          .loggingScope(LoggingScope.REQUEST_RESPONSE)
+          .clientLogger(new RestClientLogger(portalName, this.config.logRequests(), this.config.logResponses()));
+    }
+
+    return builder.build(CfpDevClient.class);
   }
 }

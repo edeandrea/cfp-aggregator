@@ -15,6 +15,13 @@
         time_zone varchar(255),
         website_url varchar(255),
         you_tube_url varchar(255),
+        primary key (portal_name)
+    );
+
+    create table portals (
+        base_url varchar(255) not null,
+        description TEXT,
+        portal_name varchar(255) not null,
         portal_type enum ('CFP_DEV','DEV2NEXT','SESSIONIZE') not null,
         primary key (portal_name)
     );
@@ -49,6 +56,11 @@
         video_url varchar(255),
         primary key (id)
     );
+
+    alter table if exists events
+       add constraint FKqfmn6t9bf4ndtrjis0tlv4hgv
+       foreign key (portal_name)
+       references portals;
 
     alter table if exists speaker_talks
        add constraint FKbqpjb2jdes2vmpywymqr2pc97

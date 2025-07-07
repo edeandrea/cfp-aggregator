@@ -6,13 +6,22 @@ import java.util.TimeZone;
 
 import jakarta.inject.Inject;
 
-import com.redhat.cfpaggregator.config.CfpPortalsConfig.PortalType;
 import com.redhat.cfpaggregator.domain.Event;
+import com.redhat.cfpaggregator.domain.Portal;
+import com.redhat.cfpaggregator.domain.PortalType;
 import com.redhat.cfpaggregator.domain.Speaker;
 import com.redhat.cfpaggregator.domain.Talk;
 
 abstract class BaseRepositoryTests {
   protected static final TimeZone TIMEZONE = TimeZone.getDefault();
+
+  protected static final Portal PORTAL = Portal.builder()
+      .portalName("Test Portal")
+      .baseUrl("http://somewhere.com")
+      .description("Some portal")
+      .portalType(PortalType.CFP_DEV)
+      .build();
+
   protected static final Event EVENT = Event.builder()
       .portalName("Test Portal")
       .name("Test Event")
@@ -21,7 +30,6 @@ abstract class BaseRepositoryTests {
       .toDate(Instant.now())
       .timeZone(TIMEZONE.getDisplayName())
       .websiteUrl("https://www.example.com")
-      .portalType(PortalType.CFP_DEV)
       .cfpOpening(Instant.now().minusSeconds(Duration.ofDays(90).toSeconds()))
       .cfpClosing(Instant.now().minusSeconds(Duration.ofDays(75).toSeconds()))
       .build();
@@ -58,6 +66,9 @@ abstract class BaseRepositoryTests {
   @Inject
   TalkRepository talkRepository;
 
+  @Inject
+  PortalRepository portalRepository;
+
   protected Event createEvent(boolean withSpeaker) {
     return createEvent(withSpeaker, false);
   }
@@ -75,8 +86,7 @@ abstract class BaseRepositoryTests {
       event.addSpeakers(speaker);
     }
 
-    this.eventRepository.persist(event);
-
+    this.portalRepository.persist(PORTAL.cloneAsNewWithNewEvent(event));
     return event;
   }
 }

@@ -12,12 +12,14 @@ import io.quarkus.test.junit.QuarkusTest;
 class SpeakerRepositoryTests extends BaseRepositoryTests {
   @Test
   void itWorks() {
+    assertThat(this.portalRepository.count()).isZero();
     assertThat(this.eventRepository.count()).isZero();
     assertThat(this.speakerRepository.count()).isZero();
     assertThat(this.talkRepository.count()).isZero();
 
     // Create the event
     var event = createEvent(false);
+    assertThat(this.portalRepository.count()).isOne();
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isZero();
     assertThat(this.talkRepository.count()).isZero();
@@ -25,6 +27,7 @@ class SpeakerRepositoryTests extends BaseRepositoryTests {
     // Persist the speaker
     // Clone the sample data so as to not modify it
     this.speakerRepository.persist(SPEAKER.cloneAsNewWithNewEvent(event));
+    assertThat(this.portalRepository.count()).isOne();
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isOne();
     assertThat(this.talkRepository.count()).isZero();
@@ -44,7 +47,7 @@ class SpeakerRepositoryTests extends BaseRepositoryTests {
     assertThat(firstSpeaker.getEvent())
         .usingRecursiveComparison()
         .ignoringFieldsMatchingRegexes(".*hibernate.*")
-        .ignoringFields("id", "speakers")
+        .ignoringFields("id", "speakers", "portal")
         .isEqualTo(EVENT);
     assertThat(firstSpeaker.getTalks()).isEmpty();
     assertThat(firstSpeaker.getTalkCount()).isZero();

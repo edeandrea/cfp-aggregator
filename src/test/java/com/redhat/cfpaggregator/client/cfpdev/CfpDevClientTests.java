@@ -32,39 +32,66 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.redhat.cfpaggregator.client.ClientProducer;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevClientTests.ConfigTestProfile;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevTalkDetails.Keyword;
+import com.redhat.cfpaggregator.config.CfpPortalsConfig;
+import com.redhat.cfpaggregator.domain.Portal;
 import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
+import com.redhat.cfpaggregator.mapping.PortalMapper;
+import com.redhat.cfpaggregator.repository.PortalRepository;
 import io.quarkiverse.wiremock.devservice.ConnectWireMock;
-import io.smallrye.common.annotation.Identifier;
 
 @QuarkusTest
 @TestProfile(ConfigTestProfile.class)
 @ConnectWireMock
 class CfpDevClientTests {
   @Inject
-  @Identifier(ClientProducer.CFP_DEV_CLIENTS)
-  Map<String, CfpDevClient> cfpDevClients;
+  ClientProducer clientProducer;
+
+  @Inject
+  PortalRepository portalRepository;
+
+  @Inject
+  PortalMapper portalMapper;
+
+  @Inject
+  CfpPortalsConfig cfpPortalsConfig;
 
   WireMock wireMock;
 
   @BeforeEach
   void beforeEach() {
     this.wireMock.resetToDefaultMappings();
+    this.portalRepository.deleteAllWithCascade();
+
+    this.cfpPortalsConfig.portals()
+        .entrySet()
+        .stream()
+        .map(entry -> this.portalMapper.fromConfig(entry.getKey(), entry.getValue()))
+        .forEach(this.portalRepository::persistAndFlush);
+
+    assertThat(this.portalRepository.count()).isGreaterThanOrEqualTo(1);
   }
 
   private CfpDevClient getClient() {
-    return assertThat(this.cfpDevClients.get("portal1"))
+    return getClient("portal1");
+  }
+
+  private CfpDevClient getClient(String portalName) {
+    return getClient(this.portalRepository.findById(portalName));
+  }
+
+  private CfpDevClient getClient(Portal portal) {
+    return assertThat(this.clientProducer.getCfpDevClient(portal))
         .isNotNull()
-        .isInstanceOf(CfpDevClient.class)
         .actual();
   }
 
   @Test
   void hasCorrectClients() {
-    assertThat(this.cfpDevClients)
+    assertThat(this.portalRepository.listAll())
         .isNotNull()
-        .hasSizeGreaterThanOrEqualTo(1)
-        .containsKeys("portal1")
-        .extractingByKey("portal1")
+        .filteredOn(Portal::getPortalName, "portal1")
+        .map(this::getClient)
+        .singleElement()
         .isInstanceOf(CfpDevClient.class);
   }
 

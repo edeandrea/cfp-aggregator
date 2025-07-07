@@ -1,7 +1,6 @@
 package com.redhat.cfpaggregator.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -16,56 +15,74 @@ import io.quarkus.panache.common.Sort.Direction;
 import io.quarkus.runtime.StartupEvent;
 
 import com.redhat.cfpaggregator.client.ClientProducer;
-import com.redhat.cfpaggregator.client.cfpdev.CfpDevClient;
 import com.redhat.cfpaggregator.config.CfpPortalsConfig;
-import com.redhat.cfpaggregator.config.CfpPortalsConfig.CfpPortalConfig;
 import com.redhat.cfpaggregator.domain.Event;
+import com.redhat.cfpaggregator.domain.Portal;
 import com.redhat.cfpaggregator.domain.Speaker;
 import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
 import com.redhat.cfpaggregator.mapping.EventMapper;
+import com.redhat.cfpaggregator.mapping.PortalMapper;
 import com.redhat.cfpaggregator.mapping.SpeakerMapper;
 import com.redhat.cfpaggregator.mapping.TalkMapper;
 import com.redhat.cfpaggregator.mapping.TalkSearchCriteriaMapper;
 import com.redhat.cfpaggregator.repository.EventRepository;
+import com.redhat.cfpaggregator.repository.PortalRepository;
 import com.redhat.cfpaggregator.ui.views.EventViews.EventName;
-import io.smallrye.common.annotation.Identifier;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 
 @ApplicationScoped
 @Transactional
 public class CfpService {
-  private final Map<String, CfpDevClient> cfpDevClients;
+  private final ClientProducer clientProducer;
   private final CfpPortalsConfig config;
   private final EventMapper eventMapper;
   private final SpeakerMapper speakerMapper;
   private final TalkMapper talkMapper;
+  private final PortalMapper portalMapper;
   private final TalkSearchCriteriaMapper talkSearchCriteriaMapper;
+  private final PortalRepository portalRepository;
   private final EventRepository eventRepository;
 
   public CfpService(
-      @Identifier(ClientProducer.CFP_DEV_CLIENTS) Map<String, CfpDevClient> cfpDevClients,
+      ClientProducer clientProducer,
       CfpPortalsConfig config,
       EventMapper eventMapper,
       SpeakerMapper speakerMapper,
-      TalkMapper talkMapper,
+      TalkMapper talkMapper, PortalMapper portalMapper,
       TalkSearchCriteriaMapper talkSearchCriteriaMapper,
+      PortalRepository portalRepository,
       EventRepository eventRepository) {
-    this.cfpDevClients = cfpDevClients;
+
+    this.clientProducer = clientProducer;
     this.config = config;
     this.eventMapper = eventMapper;
     this.speakerMapper = speakerMapper;
     this.talkMapper = talkMapper;
+    this.portalMapper = portalMapper;
     this.talkSearchCriteriaMapper = talkSearchCriteriaMapper;
+    this.portalRepository = portalRepository;
     this.eventRepository = eventRepository;
   }
 
   void onStartup(@Observes StartupEvent startupEvent) {
     if (this.config.reloadOnStartup()) {
       Log.debug("Reloading events on startup");
-      this.eventRepository.deleteAllWithCascade();
+      this.portalRepository.deleteAllWithCascade();
+
+      createPortals();
       createEvents(this.talkSearchCriteriaMapper.fromConfig(this.config.defaultSearchCriteria()));
     }
+  }
+
+  public void createPortals() {
+    Log.debugf("Creating portals: %s", this.config.portals());
+
+    this.config.portals()
+        .entrySet()
+        .stream()
+        .map(entry -> this.portalMapper.fromConfig(entry.getKey(), entry.getValue()))
+        .forEach(this.portalRepository::persistAndFlush);
   }
 
   /**
@@ -80,33 +97,34 @@ public class CfpService {
     Log.debugf("Creating events with search criteria: %s", searchCriteria);
 
     // Let's parallelize this
-    var unis = this.cfpDevClients.entrySet()
-        .stream()
-        .map(entry ->
+    var portals = this.portalRepository.listAll();
+    var unis = portals.stream()
+        .map(portal ->
             Uni.createFrom()
-                .item(() ->
-                    createEvent(entry.getKey(), this.config.portals().get(entry.getKey()), entry.getValue(), searchCriteria)
-                )
+                .item(() -> createEvent(portal, searchCriteria))
                 .runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
         )
         .toList();
 
-    var events = Uni.join()
+    Uni.join()
         .all(unis)
         .andFailFast()
-        .await().atMost(this.config.timeout().multipliedBy(this.config.portalNames().size()));
+        .await().atMost(this.config.timeout().multipliedBy(portals.size()));
 
-    this.eventRepository.saveEvents(events);
+    this.portalRepository.persist(portals);
     Log.info("Successfully created events");
   }
 
-  private Event createEvent(String portalName, CfpPortalConfig portalConfig, CfpDevClient client, TalkSearchCriteria searchCriteria) {
+  private Event createEvent(Portal portal, TalkSearchCriteria searchCriteria) {
     // The object model from cfp.dev is a bit backwards
     // You search for talks, which have references to speakers
     // We are flipping the model
+    var portalName = portal.getPortalName();
     Log.debugf("Creating event for portal %s", portalName);
+
+    var client = this.clientProducer.getCfpDevClient(portal);
     var eventDetails = client.getEventDetails(portalName);
-    var event = this.eventMapper.fromCfpDev(portalName, portalConfig.portalType(), eventDetails);
+    var event = this.eventMapper.fromCfpDev(portalName, eventDetails);
 
     if (eventDetails != null) {
       var talks = client.findTalks(searchCriteria, portalName);
@@ -134,6 +152,8 @@ public class CfpService {
         });
       }
     }
+
+    portal.setEvent(event);
 
     return event;
   }

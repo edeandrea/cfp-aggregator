@@ -10,8 +10,10 @@ import java.util.Set;
 import io.quarkus.runtime.annotations.ConfigDocMapKey;
 import io.quarkus.runtime.annotations.ConfigDocSection;
 
+import com.redhat.cfpaggregator.domain.PortalType;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
+import io.smallrye.config.WithName;
 
 /**
  * Configuration mapping interface for CFP portals.
@@ -20,33 +22,6 @@ import io.smallrye.config.WithDefault;
  */
 @ConfigMapping(prefix = "cfps")
 public interface CfpPortalsConfig {
-  /**
-   * Represents the types of portals supported in the CFP configuration.
-   *
-   * This enum is part of the configuration mapping for defining portal-specific details and behaviors.
-   * It identifies the three available portal types:
-   * - CFP_DEV: Represents the cfp.dev portal(s) (Devoxx, VoxxedDays).
-   * - SESSIONIZE: Represents the Sessionize platform.
-   * - DEV2NEXT: Represents the Dev2Next platform.
-   *
-   * These portal types are used to configure portal-specific settings through the {@link CfpPortalsConfig}.
-   */
-  enum PortalType {
-    /**
-     * The cfp.dev portal(s), which includes platforms such as Devoxx and VoxxedDays.
-     */
-    CFP_DEV,
-
-    /**
-     * The Sessionize platform as a type of portal in the CFP configuration.
-     */
-    SESSIONIZE,
-
-    /**
-     * The Dev2Next platform as a type of portal in the CFP configuration.
-     */
-    DEV2NEXT
-  }
 
   /**
    * Whether or not the application should reload all of its data on startup
@@ -88,6 +63,9 @@ public interface CfpPortalsConfig {
    */
   DefaultSearchCriteria defaultSearchCriteria();
 
+  @Override
+  String toString();
+
   /**
    * Retrieves the set of portal names from the configuration.
    *
@@ -110,6 +88,9 @@ public interface CfpPortalsConfig {
 
     @WithDefault("Red Hat")
     List<String> companies();
+
+    @Override
+    String toString();
   }
 
   /**
@@ -123,34 +104,22 @@ public interface CfpPortalsConfig {
     /**
      * The base URL configured for the portal.
      */
-    String baseUrl();
+    @WithName("base-url")
+    String getBaseUrl();
 
     /**
      * The type of portal configured for this instance.
      */
-    PortalType portalType();
+    @WithName("portal-type")
+    PortalType getPortalType();
 
     /**
      * An optional description for the portal configuration. This description may include additional context or details about the portal setup.
      */
-    Optional<String> description();
+    @WithName("description")
+    Optional<String> getDescription();
 
-    /**
-     * Whether an individual client should log requests
-     */
-    @WithDefault("${cfps.log-requests:false}")
-    Boolean logRequests();
-
-    /**
-     * Whether an individual client should log responses
-     */
-    @WithDefault("${cfps.log-responses:false}")
-    Boolean logResponses();
-
-    /**
-     * Timeout for an individual client call
-     */
-    @WithDefault("${cfps.timeout:1m}")
-    Duration timeout();
+    @Override
+    String toString();
   }
 }
