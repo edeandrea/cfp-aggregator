@@ -15,6 +15,7 @@ import com.redhat.cfpaggregator.domain.Speaker;
 import com.redhat.cfpaggregator.domain.Talk;
 import com.redhat.cfpaggregator.service.CfpService;
 import com.redhat.cfpaggregator.ui.components.BoldSpan;
+import com.redhat.cfpaggregator.ui.views.EventSortBy;
 import com.redhat.cfpaggregator.ui.views.EventViews.EventName;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.accordion.Accordion;
@@ -25,13 +26,13 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.AnchorTarget;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.Scroller.ScrollDirection;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.data.provider.DataProvider;
+import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -48,6 +49,9 @@ public class MainView extends VerticalLayout {
   private final CfpPortalsConfig config;
   private final Details eventDetails = new Details();
   private final Accordion speakers = new Accordion();
+  private final Select<EventSortBy> eventSortBy = new Select<>();
+  private final Select<EventName> eventsSelector = new Select<>();
+  private ListDataProvider<EventName> eventDataProvider;
 
   public MainView(CfpService cfpService, CfpPortalsConfig config) {
     this.cfpService = cfpService;
@@ -93,13 +97,16 @@ public class MainView extends VerticalLayout {
     titleRow.setAlignItems(Alignment.CENTER);
     titleRow.setJustifyContentMode(JustifyContentMode.CENTER);
 
+    setupEventSortBySelector();
     var eventsSelector = createEventsSelector();
     var talkKeywordsDetails = createDefaultSearchCriteriaDetails("Talk keywords", this.config.defaultSearchCriteria().talkKeywords().stream());
     var companiesDetails = createDefaultSearchCriteriaDetails("Companies", this.config.defaultSearchCriteria().companies().stream());
 
-    titleRow.setAlignSelf(FlexComponent.Alignment.START, companiesDetails);
-    titleRow.setAlignSelf(FlexComponent.Alignment.START, eventsSelector);
-    titleRow.setAlignSelf(FlexComponent.Alignment.START, talkKeywordsDetails);
+    titleRow.setAlignSelf(Alignment.START, this.eventSortBy);
+    titleRow.setAlignSelf(Alignment.START, companiesDetails);
+    titleRow.setAlignSelf(Alignment.START, eventsSelector);
+    titleRow.setAlignSelf(Alignment.START, talkKeywordsDetails);
+    titleRow.add(this.eventSortBy);
     titleRow.add(eventsSelector);
     titleRow.add(companiesDetails);
     titleRow.add(talkKeywordsDetails);
@@ -125,27 +132,48 @@ public class MainView extends VerticalLayout {
     return defaultSearchCriteriaDetails;
   }
 
+  private void setupEventSortBySelector() {
+    var sortBy = EventSortBy.valuesOrderedByName();
+    this.eventSortBy.setLabel("Sort events by");
+    this.eventSortBy.setTooltipText("How to sort the events drop-down");
+    this.eventSortBy.setWidth("min-content");
+    this.eventSortBy.setHeightFull();
+    this.eventSortBy.setItems(DataProvider.ofCollection(sortBy));
+    this.eventSortBy.setItemLabelGenerator(EventSortBy::getName);
+    this.eventSortBy.setValue(sortBy.stream().findFirst().get());
+    this.eventSortBy.addValueChangeListener(event -> handleEventSortByChanged(event.getValue()));
+  }
+
   private Select<EventName> createEventsSelector() {
-    var eventsSelector = new Select<EventName>();
-    eventsSelector.setLabel("Events");
-    eventsSelector.setPlaceholder("Select an event");
-    eventsSelector.setTooltipText("Select an event to view speakers and talks for that event");
-    eventsSelector.setWidth("min-content");
-    eventsSelector.setHeightFull();
-    eventsSelector.setItems(DataProvider.ofCollection(this.cfpService.getEventNamesOrderedByMostRecent()));
-    eventsSelector.setItemLabelGenerator(event -> "%s (%s)".formatted(event.name(), M_Y_FORMATTER.withZone(ZoneId.of(event.timeZone())).format(event.fromDate())));
-    eventsSelector.addValueChangeListener(event -> handleEventChanged(event.getValue()));
+    this.eventDataProvider = DataProvider.ofCollection(this.cfpService.getEvents());
+
+    this.eventsSelector.setLabel("Events");
+    this.eventsSelector.setPlaceholder("Select an event");
+    this.eventsSelector.setTooltipText("Select an event to view speakers and talks for that event");
+    this.eventsSelector.setWidth("min-content");
+    this.eventsSelector.setHeightFull();
+    this.eventsSelector.setDataProvider(this.eventDataProvider);
+    this.eventsSelector.setItemLabelGenerator(event -> "%s (%s)".formatted(event.name(), M_Y_FORMATTER.withZone(ZoneId.of(event.timeZone())).format(event.fromDate())));
+    this.eventsSelector.addValueChangeListener(event -> handleEventChanged(event.getValue()));
 
     return eventsSelector;
   }
 
-  private void handleEventChanged(EventName newEvent) {
-    var event = this.cfpService.getFullyPopulatedEvent(newEvent.portalName());
-    this.eventDetails.removeAll();
-    this.speakers.getChildren().forEach(this.speakers::remove);
+  private void handleEventSortByChanged(EventSortBy eventSortBy) {
+    var currentEvent = this.eventsSelector.getValue();
+    this.eventDataProvider.setSortComparator(eventSortBy.getEventNameComparator()::compare);
+    this.eventsSelector.setValue(currentEvent);
+  }
 
-    handleEventDetailsChange(event);
-    handleSpeakersChange(event);
+  private void handleEventChanged(EventName newEvent) {
+    if (newEvent != null) {
+      var event = this.cfpService.getFullyPopulatedEvent(newEvent.portalName());
+      this.eventDetails.removeAll();
+      this.speakers.getChildren().forEach(this.speakers::remove);
+
+      handleEventDetailsChange(event);
+      handleSpeakersChange(event);
+    }
   }
 
   private void handleEventDetailsChange(Event newEvent) {
@@ -195,7 +223,6 @@ public class MainView extends VerticalLayout {
 
   private void createTalkPanel(Talk talk, Accordion speakerPanel) {
     var talkPanel = new FormLayout();
-//    talkPanel.setAutoResponsive(true);
     talkPanel.setLabelsAside(true);
     talkPanel.setLabelSpacing("2em");
 

@@ -10,8 +10,6 @@ import jakarta.enterprise.event.Observes;
 import jakarta.transaction.Transactional;
 
 import io.quarkus.logging.Log;
-import io.quarkus.panache.common.Sort;
-import io.quarkus.panache.common.Sort.Direction;
 import io.quarkus.runtime.StartupEvent;
 
 import com.redhat.cfpaggregator.client.ClientProducer;
@@ -158,8 +156,8 @@ public class CfpService {
     return event;
   }
 
-  public List<EventName> getEventNamesOrderedByMostRecent() {
-    return this.eventRepository.findAll(Sort.by("toDate", Direction.Descending))
+  public List<EventName> getEvents() {
+    return this.eventRepository.findAll()
         .project(EventName.class)
         .list();
   }
