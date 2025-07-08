@@ -3,9 +3,10 @@ package com.redhat.cfpaggregator.ui;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
@@ -15,8 +16,10 @@ import com.redhat.cfpaggregator.domain.Speaker;
 import com.redhat.cfpaggregator.domain.Talk;
 import com.redhat.cfpaggregator.service.CfpService;
 import com.redhat.cfpaggregator.ui.components.BoldSpan;
+import com.redhat.cfpaggregator.ui.components.SearchCriteriaDetails;
 import com.redhat.cfpaggregator.ui.views.EventSortBy;
 import com.redhat.cfpaggregator.ui.views.EventViews.EventName;
+import com.redhat.cfpaggregator.ui.views.SearchCriteria;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.details.Details;
@@ -99,8 +102,8 @@ public class MainView extends VerticalLayout {
 
     setupEventSortBySelector();
     var eventsSelector = createEventsSelector();
-    var talkKeywordsDetails = createDefaultSearchCriteriaDetails("Talk keywords", this.config.defaultSearchCriteria().talkKeywords().stream());
-    var companiesDetails = createDefaultSearchCriteriaDetails("Companies", this.config.defaultSearchCriteria().companies().stream());
+    var talkKeywordsDetails = new SearchCriteriaDetails("Talk keywords", DataProvider.ofCollection(this.config.defaultSearchCriteria().talkKeywords().stream().map(SearchCriteria::new).collect(Collectors.toCollection(ArrayList::new))));
+    var companiesDetails = new SearchCriteriaDetails("Companies", DataProvider.ofCollection(this.config.defaultSearchCriteria().companies().stream().map(SearchCriteria::new).collect(Collectors.toCollection(ArrayList::new))));
 
     titleRow.setAlignSelf(Alignment.START, this.eventSortBy);
     titleRow.setAlignSelf(Alignment.START, companiesDetails);
@@ -112,24 +115,6 @@ public class MainView extends VerticalLayout {
     titleRow.add(talkKeywordsDetails);
 
     return titleRow;
-  }
-
-  private Details createDefaultSearchCriteriaDetails(String title, Stream<String> values) {
-    var content = new VerticalLayout();
-    content.setSpacing(false);
-    content.setPadding(false);
-
-    var defaultSearchCriteriaDetails = new Details();
-    defaultSearchCriteriaDetails.setWidth("min-content");
-    defaultSearchCriteriaDetails.setHeightFull();
-    defaultSearchCriteriaDetails.setSummaryText(title);
-    defaultSearchCriteriaDetails.setOpened(true);
-    defaultSearchCriteriaDetails.setContent(content);
-
-    values.map(BoldSpan::new)
-        .forEach(content::add);
-
-    return defaultSearchCriteriaDetails;
   }
 
   private void setupEventSortBySelector() {
@@ -151,6 +136,7 @@ public class MainView extends VerticalLayout {
     this.eventsSelector.setPlaceholder("Select an event");
     this.eventsSelector.setTooltipText("Select an event to view speakers and talks for that event");
     this.eventsSelector.setWidth("min-content");
+    this.eventsSelector.setHeight("min-content");
     this.eventsSelector.setHeightFull();
     this.eventsSelector.setDataProvider(this.eventDataProvider);
     this.eventsSelector.setItemLabelGenerator(event -> "%s (%s)".formatted(event.name(), M_Y_FORMATTER.withZone(ZoneId.of(event.timeZone())).format(event.fromDate())));
