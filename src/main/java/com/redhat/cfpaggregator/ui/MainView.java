@@ -1,11 +1,13 @@
 package com.redhat.cfpaggregator.ui;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.vaadin.lineawesome.LineAwesomeIconUrl;
@@ -14,14 +16,19 @@ import com.redhat.cfpaggregator.config.CfpPortalsConfig;
 import com.redhat.cfpaggregator.domain.Event;
 import com.redhat.cfpaggregator.domain.Speaker;
 import com.redhat.cfpaggregator.domain.Talk;
+import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
 import com.redhat.cfpaggregator.service.CfpService;
 import com.redhat.cfpaggregator.ui.components.BoldSpan;
 import com.redhat.cfpaggregator.ui.components.SearchCriteriaDetails;
+import com.redhat.cfpaggregator.ui.components.SearchProgressBar;
 import com.redhat.cfpaggregator.ui.views.EventSortBy;
 import com.redhat.cfpaggregator.ui.views.EventViews.EventName;
 import com.redhat.cfpaggregator.ui.views.SearchCriteria;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.accordion.Accordion;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -29,6 +36,8 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.AnchorTarget;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.Notification.Position;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.Scroller.ScrollDirection;
@@ -41,6 +50,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 
 @PageTitle("CFP Aggregator")
 @Route("")
@@ -54,17 +65,30 @@ public class MainView extends VerticalLayout {
   private final Accordion speakers = new Accordion();
   private final Select<EventSortBy> eventSortBy = new Select<>();
   private final Select<EventName> eventsSelector = new Select<>();
+  private final ListDataProvider<SearchCriteria> companiesSearchCriteria;
+  private final ListDataProvider<SearchCriteria> talkKeywordsSearchCriteria;
+  private final Component searchProgress;
   private ListDataProvider<EventName> eventDataProvider;
 
   public MainView(CfpService cfpService, CfpPortalsConfig config) {
     this.cfpService = cfpService;
     this.config = config;
+    this.talkKeywordsSearchCriteria = DataProvider.ofCollection(this.config.defaultSearchCriteria().talkKeywords().stream().map(SearchCriteria::new).collect(Collectors.toCollection(ArrayList::new)));
+    this.companiesSearchCriteria = DataProvider.ofCollection(this.config.defaultSearchCriteria().companies().stream().map(SearchCriteria::new).collect(Collectors.toCollection(ArrayList::new)));
+
+    var titleRow = createTitleRow();
+    this.searchProgress = new SearchProgressBar(titleRow);
 
     setSizeFull();
     getStyle().set("flex-grow", "1");
-    add(createTitleRow());
+    add(titleRow);
     add(new Hr());
     add(createMainBody());
+    setupDefaultSelections();
+  }
+
+  private void setupDefaultSelections() {
+    this.eventSortBy.setValue(EventSortBy.EVENT_DATE);
   }
 
   private VerticalLayout createMainBody() {
@@ -102,30 +126,33 @@ public class MainView extends VerticalLayout {
 
     setupEventSortBySelector();
     var eventsSelector = createEventsSelector();
-    var talkKeywordsDetails = new SearchCriteriaDetails("Talk keywords", DataProvider.ofCollection(this.config.defaultSearchCriteria().talkKeywords().stream().map(SearchCriteria::new).collect(Collectors.toCollection(ArrayList::new))));
-    var companiesDetails = new SearchCriteriaDetails("Companies", DataProvider.ofCollection(this.config.defaultSearchCriteria().companies().stream().map(SearchCriteria::new).collect(Collectors.toCollection(ArrayList::new))));
+    var talkKeywordsDetails = new SearchCriteriaDetails("Talk keywords", this.talkKeywordsSearchCriteria);
+    var companiesDetails = new SearchCriteriaDetails("Companies", this.companiesSearchCriteria);
 
-    titleRow.setAlignSelf(Alignment.START, this.eventSortBy);
-    titleRow.setAlignSelf(Alignment.START, companiesDetails);
-    titleRow.setAlignSelf(Alignment.START, eventsSelector);
-    titleRow.setAlignSelf(Alignment.START, talkKeywordsDetails);
-    titleRow.add(this.eventSortBy);
-    titleRow.add(eventsSelector);
-    titleRow.add(companiesDetails);
-    titleRow.add(talkKeywordsDetails);
+    var searchButton = new Button("Search", event -> handleSearchButtonClicked(event.getSource()));
+    searchButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+    searchButton.setWidthFull();
+    searchButton.setTooltipText("Search for events based on search criteria");
+
+    var leftSide = new VerticalLayout();
+    leftSide.setPadding(false);
+    leftSide.setWidth("min-content");
+    leftSide.setAlignItems(Alignment.START);
+    leftSide.add(this.eventSortBy, eventsSelector, searchButton);
+
+    titleRow.setAlignSelf(Alignment.START, leftSide, companiesDetails, talkKeywordsDetails);
+    titleRow.add(leftSide, companiesDetails, talkKeywordsDetails);
 
     return titleRow;
   }
 
   private void setupEventSortBySelector() {
-    var sortBy = EventSortBy.valuesOrderedByName();
     this.eventSortBy.setLabel("Sort events by");
     this.eventSortBy.setTooltipText("How to sort the events drop-down");
     this.eventSortBy.setWidth("min-content");
     this.eventSortBy.setHeightFull();
-    this.eventSortBy.setItems(DataProvider.ofCollection(sortBy));
+    this.eventSortBy.setItems(DataProvider.ofCollection(EventSortBy.valuesOrderedByName()));
     this.eventSortBy.setItemLabelGenerator(EventSortBy::getName);
-    this.eventSortBy.setValue(sortBy.stream().findFirst().get());
     this.eventSortBy.addValueChangeListener(event -> handleEventSortByChanged(event.getValue()));
   }
 
@@ -145,6 +172,33 @@ public class MainView extends VerticalLayout {
     return eventsSelector;
   }
 
+  private void handleSearchButtonClicked(Button source) {
+    Consumer<? super TalkSearchCriteria> whenComplete = criteria -> source.getUI().orElseThrow().access(() -> {
+      this.eventDataProvider.refreshAll();
+      this.eventsSelector.setValue(this.eventsSelector.getEmptyValue());
+      this.searchProgress.setVisible(false);
+    });
+
+    Consumer<? super Throwable> whenError = error -> source.getUI().orElseThrow().access(() -> {
+      whenComplete.accept(null);
+      Notification.show("Error: %s".formatted(error.getMessage()), (int) Duration.ofSeconds(3).toMillis(), Position.TOP_CENTER);
+    });
+
+    this.searchProgress.setVisible(true);
+
+    Uni.createFrom().item(createTalkSearchCriteria())
+        .invoke(this.cfpService::recreateEvents)
+        .runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
+        .subscribe().with(whenComplete, whenError);
+  }
+
+  private TalkSearchCriteria createTalkSearchCriteria() {
+    return TalkSearchCriteria.builder()
+        .speakerCompanies(this.companiesSearchCriteria.getItems().stream().map(SearchCriteria::getKeyword).toList())
+        .talkKeywords(this.talkKeywordsSearchCriteria.getItems().stream().map(SearchCriteria::getKeyword).toList())
+        .build();
+  }
+
   private void handleEventSortByChanged(EventSortBy eventSortBy) {
     var currentEvent = this.eventsSelector.getValue();
     this.eventDataProvider.setSortComparator(eventSortBy.getEventNameComparator()::compare);
@@ -152,11 +206,14 @@ public class MainView extends VerticalLayout {
   }
 
   private void handleEventChanged(EventName newEvent) {
+    this.eventDetails.removeAll();
+    this.speakers.getChildren().forEach(this.speakers::remove);
+
+    this.eventDetails.setVisible(false);
+    this.speakers.setVisible(false);
+
     if (newEvent != null) {
       var event = this.cfpService.getFullyPopulatedEvent(newEvent.portalName());
-      this.eventDetails.removeAll();
-      this.speakers.getChildren().forEach(this.speakers::remove);
-
       handleEventDetailsChange(event);
       handleSpeakersChange(event);
     }

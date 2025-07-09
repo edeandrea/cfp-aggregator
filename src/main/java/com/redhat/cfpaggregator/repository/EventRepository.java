@@ -46,6 +46,8 @@ public class EventRepository implements PanacheRepositoryBase<Event, String> {
             portal.portal().setEvent(null);
             deleteById(portal.portal().getPortalName());
           });
+
+      flush();
     }
   }
 }

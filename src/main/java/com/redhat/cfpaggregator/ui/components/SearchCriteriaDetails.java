@@ -8,7 +8,6 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.details.Details;
-import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
@@ -27,7 +26,6 @@ public final class SearchCriteriaDetails extends Details {
 
     var grid = createGrid(dataProvider);
     add(new Button("Add", event -> new AddKeywordDialog(title, grid.getListDataView()).open()));
-    addThemeVariants(DetailsVariant.FILLED);
     setWidthFull();
     setHeight("min-content");
     setOpened(true);
@@ -35,9 +33,10 @@ public final class SearchCriteriaDetails extends Details {
 
   private Grid<SearchCriteria> createGrid(ListDataProvider<SearchCriteria> dataProvider) {
     var grid = new Grid<>(SearchCriteria.class, false);
+    grid.getStyle().set("--vaadin-grid-cell-padding", "1px");
     grid.setAllRowsVisible(false);
     grid.setHeight("200px");
-    grid.addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS);
+    grid.addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_NO_ROW_BORDERS);
 
     var editor = grid.getEditor();
     var keywordColumn = grid
@@ -83,7 +82,7 @@ public final class SearchCriteriaDetails extends Details {
 
     var saveButton = new Button("Save", e -> editor.save());
     var cancelButton = new Button(VaadinIcon.CLOSE.create(), e -> editor.cancel());
-    cancelButton.addThemeVariants(ButtonVariant.LUMO_ICON, ButtonVariant.LUMO_ERROR);
+    cancelButton.addThemeVariants(ButtonVariant.LUMO_ICON);
     var actions = new HorizontalLayout(saveButton, cancelButton);
     actions.setPadding(false);
     editColumn.setEditorComponent(actions);

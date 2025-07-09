@@ -13,8 +13,6 @@ import com.redhat.cfpaggregator.domain.Talk;
 @ApplicationScoped
 @Transactional
 public class PortalRepository implements PanacheRepositoryBase<Portal, String> {
-  private record BaseUrl(String baseUrl) {}
-
   /**
    * Deletes all {@link Event} entities from the repository and cascades the operation
    * to related entities such as {@link Speaker} and {@link Talk}.
@@ -30,6 +28,8 @@ public class PortalRepository implements PanacheRepositoryBase<Portal, String> {
           .stream()
           .map(PortalName::portalName)
           .forEach(this::deleteById);
+
+      flush();
     }
   }
 }

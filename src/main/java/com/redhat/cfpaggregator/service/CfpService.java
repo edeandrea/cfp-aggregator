@@ -83,6 +83,13 @@ public class CfpService {
         .forEach(this.portalRepository::persistAndFlush);
   }
 
+  public void recreateEvents(TalkSearchCriteria searchCriteria) {
+    Log.debugf("Recreating events with search criteria: %s", searchCriteria);
+    this.eventRepository.deleteAllWithCascade();
+    createEvents(searchCriteria);
+    Log.debug("Successfully recreated events");
+  }
+
   /**
    * Fetches events based on the specified search criteria. The method utilizes
    * the provided {@code TalkSearchCriteria} to filter and retrieve events that
