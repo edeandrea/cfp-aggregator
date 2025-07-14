@@ -4,9 +4,6 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.function.Consumer;
 
-import com.redhat.cfpaggregator.domain.Portal;
-import com.redhat.cfpaggregator.domain.PortalType;
-import com.redhat.cfpaggregator.service.CfpService;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -26,6 +23,10 @@ import com.vaadin.flow.data.binder.ValueContext;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.validator.AbstractValidator;
 import com.vaadin.flow.data.validator.RegexpValidator;
+
+import com.redhat.cfpaggregator.domain.Portal;
+import com.redhat.cfpaggregator.domain.PortalType;
+import com.redhat.cfpaggregator.service.CfpService;
 
 public final class EventDetailsForm extends Dialog {
   private final TextField portalNameField = new TextField("Portal Name");
@@ -98,6 +99,7 @@ public final class EventDetailsForm extends Dialog {
   private void configureBinder() {
     this.binder.forField(this.portalNameField)
         .asRequired("Portal name is required")
+        .withValidator(new RegexpValidator("Portal name must be alphanumeric", "^[a-zA-Z0-9]+$"))
         .withValidator(new PortalNameValidator(this.cfpService))
         .bind(Portal::getPortalName, Portal::setPortalName);
 

@@ -44,6 +44,21 @@ quarkus:
   application:
     name: cfp-aggregator
 
+  # Qute
+  qute:
+    suffixes:
+      - html
+      - txt
+      - yml
+      - yaml
+      - properties
+      - sql
+    content-types:
+      yml: application/yaml
+      yaml: application/yaml
+      properties: text/properties
+      sql: application/sql
+
   # Flyway
   flyway:
 #    baseline-at-start: true

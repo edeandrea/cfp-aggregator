@@ -10,25 +10,11 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import org.vaadin.lineawesome.LineAwesomeIconUrl;
-
 import io.quarkus.logging.Log;
 
-import com.redhat.cfpaggregator.config.CfpPortalsConfig;
-import com.redhat.cfpaggregator.domain.Event;
-import com.redhat.cfpaggregator.domain.Portal;
-import com.redhat.cfpaggregator.domain.Speaker;
-import com.redhat.cfpaggregator.domain.Talk;
-import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
-import com.redhat.cfpaggregator.mapping.EventMapper;
-import com.redhat.cfpaggregator.service.CfpService;
-import com.redhat.cfpaggregator.ui.components.BoldSpan;
-import com.redhat.cfpaggregator.ui.components.EventDetailsForm;
-import com.redhat.cfpaggregator.ui.components.SearchCriteriaDetails;
-import com.redhat.cfpaggregator.ui.components.SearchProgressBar;
-import com.redhat.cfpaggregator.ui.views.EventSortBy;
-import com.redhat.cfpaggregator.ui.views.EventViews.EventName;
-import com.redhat.cfpaggregator.ui.views.SearchCriteria;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
+
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.accordion.Accordion;
@@ -58,8 +44,24 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.Command;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
+import org.vaadin.lineawesome.LineAwesomeIconUrl;
+
+import com.redhat.cfpaggregator.config.CfpPortalsConfig;
+import com.redhat.cfpaggregator.domain.Event;
+import com.redhat.cfpaggregator.domain.Portal;
+import com.redhat.cfpaggregator.domain.Speaker;
+import com.redhat.cfpaggregator.domain.Talk;
+import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
+import com.redhat.cfpaggregator.mapping.EventMapper;
+import com.redhat.cfpaggregator.service.CfpService;
+import com.redhat.cfpaggregator.ui.components.BoldSpan;
+import com.redhat.cfpaggregator.ui.components.EventDetailsForm;
+import com.redhat.cfpaggregator.ui.components.ExportPortalConfigDialog;
+import com.redhat.cfpaggregator.ui.components.SearchCriteriaDetails;
+import com.redhat.cfpaggregator.ui.components.SearchProgressBar;
+import com.redhat.cfpaggregator.ui.views.EventSortBy;
+import com.redhat.cfpaggregator.ui.views.EventViews.EventName;
+import com.redhat.cfpaggregator.ui.views.SearchCriteria;
 
 @PageTitle("CFP Aggregator")
 @Route("")
@@ -146,6 +148,11 @@ public class MainView extends VerticalLayout {
     addNewEventButton.setTooltipText("Add a new event to the list of events");
     addNewEventButton.setWidth("min-content");
 
+    var exportEventConfigButton = new Button(VaadinIcon.EXTERNAL_LINK.create(), event -> handleExportConfig());
+    exportEventConfigButton.addThemeVariants(ButtonVariant.LUMO_SMALL);
+    exportEventConfigButton.setTooltipText("Export the current event configurations");
+    exportEventConfigButton.setWidth("min-content");
+
     this.editEventButton.addClickListener(event -> handleEditEvent(eventsSelector.getValue()));
     this.editEventButton.addThemeVariants(ButtonVariant.LUMO_SMALL, ButtonVariant.LUMO_SUCCESS);
     this.editEventButton.setTooltipText("Edit the the selected event");
@@ -158,7 +165,7 @@ public class MainView extends VerticalLayout {
     this.deleteEventButton.setEnabled(false);
     this.deleteEventButton.setWidth("min-content");
 
-    var addEditDeleteEventLayout = new HorizontalLayout(addNewEventButton, this.editEventButton, this.deleteEventButton);
+    var addEditDeleteEventLayout = new HorizontalLayout(exportEventConfigButton, addNewEventButton, this.editEventButton, this.deleteEventButton);
     addEditDeleteEventLayout.setWidthFull();
     addEditDeleteEventLayout.setSpacing(true);
     addEditDeleteEventLayout.setAlignItems(Alignment.CENTER);
@@ -179,6 +186,10 @@ public class MainView extends VerticalLayout {
     titleRow.add(leftSide, companiesDetails, talkKeywordsDetails);
 
     return titleRow;
+  }
+
+  private void handleExportConfig() {
+    new ExportPortalConfigDialog(this.cfpService.getPortals()).open();
   }
 
   private void confirmDeleteEvent(EventName event) {

@@ -13,6 +13,9 @@ import jakarta.transaction.Transactional;
 import io.quarkus.logging.Log;
 import io.quarkus.runtime.StartupEvent;
 
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
+
 import com.redhat.cfpaggregator.client.ClientProducer;
 import com.redhat.cfpaggregator.config.CfpPortalsConfig;
 import com.redhat.cfpaggregator.domain.Event;
@@ -27,8 +30,6 @@ import com.redhat.cfpaggregator.mapping.TalkSearchCriteriaMapper;
 import com.redhat.cfpaggregator.repository.EventRepository;
 import com.redhat.cfpaggregator.repository.PortalRepository;
 import com.redhat.cfpaggregator.ui.views.EventViews.EventName;
-import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
 
 @ApplicationScoped
 @Transactional
@@ -96,6 +97,10 @@ public class CfpService {
     return portal;
   }
 
+  public List<Portal> getPortals() {
+    return this.portalRepository.listAll();
+  }
+
   public void createPortals() {
     Log.debugf("Creating portals: %s", this.config.portals());
 
@@ -129,7 +134,7 @@ public class CfpService {
     Log.debugf("Creating events with search criteria: %s", searchCriteria);
 
     // Let's parallelize this
-    var portals = this.portalRepository.listAll();
+    var portals = getPortals();
     var unis = portals.stream()
         .map(portal ->
             Uni.createFrom()

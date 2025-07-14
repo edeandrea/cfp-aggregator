@@ -1,0 +1,10 @@
+cfps:
+  portals:
+    {#for portal in portals}
+    # CFP Config for {portal.portalName} portal
+    {portal.portalName}:
+      base-url: {portal.baseUrl}
+      portal-type: {portal.portalType}
+      description: {portal.description}
+
+    {/for}

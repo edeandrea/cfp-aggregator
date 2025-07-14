@@ -1,0 +1,5 @@
+{#for portal in portals}
+CFPS_PORTALS_{portal.portalName}_BASE_URL={portal.baseUrl}
+CFPS_PORTALS_{portal.portalName}_PORTAL_TYPE={portal.portalType}
+CFPS_PORTALS_{portal.portalName}_DESCRIPTION={portal.description}
+{/for}

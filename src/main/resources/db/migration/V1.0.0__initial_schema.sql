@@ -1,5 +1,12 @@
+drop table if exists events cascade;
+drop table if exists portals cascade;
+drop table if exists speaker_talks cascade;
+drop table if exists speakers cascade;
+drop table if exists talks cascade ;
+drop sequence if exists speaker_seq;
+drop sequence if exists talk_seq;
 
-    create sequence speaker_seq start with 1 increment by 1;
+create sequence speaker_seq start with 1 increment by 1;
 
     create sequence talk_seq start with 1 increment by 1;
 
