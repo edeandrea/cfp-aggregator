@@ -12,14 +12,14 @@ import io.quarkus.test.junit.QuarkusTest;
 class TalkRepositoryTests extends BaseRepositoryTests {
   @Test
   void itWorks() {
-    assertThat(this.portalRepository.count()).isZero();
+    var portalRepoCount = this.portalRepository.count();
     assertThat(this.eventRepository.count()).isZero();
     assertThat(this.speakerRepository.count()).isZero();
     assertThat(this.talkRepository.count()).isZero();
 
     // Add the event and the speaker
     var event = createEvent(true);
-    assertThat(this.portalRepository.count()).isOne();
+    assertThat(this.portalRepository.count()).isEqualTo(portalRepoCount + 1);
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isOne();
     assertThat(this.talkRepository.count()).isZero();
@@ -40,7 +40,7 @@ class TalkRepositoryTests extends BaseRepositoryTests {
     speaker.addTalks(talk);
 
     this.talkRepository.persist(talk);
-    assertThat(this.portalRepository.count()).isOne();
+    assertThat(this.portalRepository.count()).isEqualTo(portalRepoCount + 1);
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isOne();
     assertThat(this.talkRepository.count()).isOne();

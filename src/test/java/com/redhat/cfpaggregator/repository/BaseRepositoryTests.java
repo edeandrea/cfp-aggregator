@@ -86,7 +86,7 @@ abstract class BaseRepositoryTests {
       event.addSpeakers(speaker);
     }
 
-    this.portalRepository.persist(PORTAL.cloneAsNewWithNewEvent(event));
+    this.portalRepository.persistAndFlush(PORTAL.cloneAsNewWithNewEvent(event));
     return event;
   }
 }

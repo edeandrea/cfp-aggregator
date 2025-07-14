@@ -1,7 +1,3 @@
-cfps:
-  log-requests: true
-  log-responses: true
-
 quarkus:
   application:
     name: cfp-aggregator
@@ -23,8 +19,6 @@ quarkus:
 
   # Flyway
   flyway:
-#    baseline-at-start: true
-#    baseline-on-migrate: true
     migrate-at-start: true
     baseline-version: 1.0.0
     baseline-description: Initial version
@@ -81,6 +75,8 @@ quarkus:
 '%dev,test':
   cfps:
     reload-on-startup: true
+    log-requests: true
+    log-responses: true
     portals:
       devoxxuk2025:
         base-url: http://localhost:${quarkus.wiremock.devservices.port}

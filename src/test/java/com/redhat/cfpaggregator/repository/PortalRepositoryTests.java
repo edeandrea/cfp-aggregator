@@ -12,14 +12,15 @@ import io.quarkus.test.junit.QuarkusTest;
 public class PortalRepositoryTests extends BaseRepositoryTests {
   @Test
   void deleteAllWithCascade() {
-    assertThat(this.portalRepository.count()).isZero();
+    this.portalRepository.deleteAllWithCascade();
+    var portalRepoCount = this.portalRepository.count();
     assertThat(this.eventRepository.count()).isZero();
     assertThat(this.speakerRepository.count()).isZero();
     assertThat(this.talkRepository.count()).isZero();
 
     createEvent(true, true);
 
-    assertThat(this.portalRepository.count()).isOne();
+    assertThat(this.portalRepository.count()).isEqualTo(portalRepoCount + 1);
     assertThat(this.eventRepository.count()).isOne();
     assertThat(this.speakerRepository.count()).isOne();
     assertThat(this.talkRepository.count()).isOne();
@@ -34,17 +35,18 @@ public class PortalRepositoryTests extends BaseRepositoryTests {
 
   @Test
   void itWorks() {
+    this.portalRepository.deleteAllWithCascade();
+    var portalRepoCount = this.portalRepository.count();
     assertThat(this.eventRepository.count()).isZero();
     assertThat(this.speakerRepository.count()).isZero();
     assertThat(this.talkRepository.count()).isZero();
-    assertThat(this.portalRepository.count()).isZero();
 
     this.portalRepository.persist(PORTAL.cloneAsNew());
 
     assertThat(this.eventRepository.count()).isZero();
     assertThat(this.speakerRepository.count()).isZero();
     assertThat(this.talkRepository.count()).isZero();
-    assertThat(this.portalRepository.count()).isOne();
+    assertThat(this.portalRepository.count()).isEqualTo(portalRepoCount + 1);
 
     assertThat(this.portalRepository.listAll())
         .singleElement()
