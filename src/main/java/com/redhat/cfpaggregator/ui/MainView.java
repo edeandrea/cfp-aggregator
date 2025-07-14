@@ -282,7 +282,9 @@ public class MainView extends VerticalLayout {
 
   private void handleSearchButtonClicked() {
     Consumer<? super TalkSearchCriteria> whenComplete = criteria -> performOnUI(() -> {
-      this.eventDataProvider.refreshAll();
+      this.eventDataProvider = DataProvider.ofCollection(this.cfpService.getEvents());
+      this.eventDataProvider.setSortComparator(this.eventSortBy.getValue().getEventNameComparator()::compare);
+      this.eventsSelector.setDataProvider(this.eventDataProvider);
       this.eventsSelector.setValue(this.eventsSelector.getEmptyValue());
       this.searchProgress.setVisible(false);
     });

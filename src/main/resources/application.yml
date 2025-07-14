@@ -1,42 +1,4 @@
 cfps:
-  portals:
-    devoxxuk2025:
-      base-url: https://devoxxuk25.cfp.dev
-      portal-type: cfp-dev
-      description: Devoxx UK 2025
-    devoxxpl25:
-      base-url: https://devoxxpl25.cfp.dev
-      portal-type: cfp-dev
-      description: Devoxx Poland 2025
-    voxxedlu2025:
-      base-url: https://voxxedlu2025.cfp.dev
-      portal-type: cfp-dev
-      description: Voxxed Days Luxembourg 2025
-    devoxxfr2025:
-      base-url: https://devoxxfr2025.cfp.dev
-      portal-type: cfp-dev
-      description: Devoxx France 2025
-    dvgr25:
-      base-url: https://dvgr25.cfp.dev
-      portal-type: cfp-dev
-      description: Devoxx Greece 2025
-    vdams25:
-      base-url: https://vdams25.cfp.dev
-      portal-type: cfp-dev
-      description: Voxxed Days Amsterdam 2025
-    vdbuh2025:
-      base-url: https://vdbuh2025.cfp.dev
-      portal-type: cfp-dev
-      description: Voxxed Days Bucharest 2025
-    dvbe25:
-      base-url: https://dvbe25.cfp.dev
-      portal-type: cfp-dev
-      description: Devoxx Belgium 2025
-    dvma25:
-      base-url: https://dvma25.cfp.dev
-      portal-type: cfp-dev
-      description: Devoxx Morocco 2025
-  reload-on-startup: true
   log-requests: true
   log-responses: true
 
@@ -63,7 +25,7 @@ quarkus:
   flyway:
 #    baseline-at-start: true
 #    baseline-on-migrate: true
-#    migrate-at-start: true
+    migrate-at-start: true
     baseline-version: 1.0.0
     baseline-description: Initial version
 
@@ -89,12 +51,19 @@ quarkus:
       optimization:
         enable-reflection-free-serializers: true
 
+  # Datasource
+  datasource:
+    jdbc:
+      telemetry: true
+      url: jdbc:h2:mem:portals
+    username: cfp
+    password: cfp
+
   # Hibernate
   hibernate-orm:
     sql-load-script: no-file
     schema-management:
-      strategy: drop-and-create
-#      strategy: none
+      strategy: validate
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     metrics:
       enabled: true
@@ -107,13 +76,11 @@ quarkus:
       enabled: true
     metrics:
       enabled: true
-  datasource:
-    jdbc:
-      telemetry: true
 
 # Dev and test modes config
 '%dev,test':
   cfps:
+    reload-on-startup: true
     portals:
       devoxxuk2025:
         base-url: http://localhost:${quarkus.wiremock.devservices.port}
