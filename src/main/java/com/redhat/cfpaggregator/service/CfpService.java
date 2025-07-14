@@ -2,6 +2,7 @@ package com.redhat.cfpaggregator.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,28 @@ public class CfpService {
     }
   }
 
+  public void deletePortal(String portalName) {
+    this.portalRepository.deleteById(portalName);
+    this.portalRepository.flush();
+  }
+
+  public Optional<Portal> getPortal(String portalName) {
+    return this.portalRepository.findByIdOptional(portalName);
+  }
+
+  public Portal savePortal(Portal updatedPortal) {
+    var portal = this.portalRepository.updatePortal(updatedPortal);
+    this.clientProducer.clearCfpDevClient(portal);
+    return portal;
+  }
+
+  public Portal createPortal(Portal portal, TalkSearchCriteria searchCriteria) {
+    portal.setEvent(createEvent(portal, searchCriteria));
+    this.portalRepository.persistAndFlush(portal);
+
+    return portal;
+  }
+
   public void createPortals() {
     Log.debugf("Creating portals: %s", this.config.portals());
 
@@ -88,6 +111,10 @@ public class CfpService {
     this.eventRepository.deleteAllWithCascade();
     createEvents(searchCriteria);
     Log.debug("Successfully recreated events");
+  }
+
+  public boolean doesPortalNameExist(String portalName) {
+    return this.portalRepository.findByIdOptional(portalName).isPresent();
   }
 
   /**

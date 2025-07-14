@@ -40,6 +40,10 @@ public class ClientProducer {
     return this.cfpDevClients.computeIfAbsent(portal.getPortalName(), portalName -> createCfpDevClient(portal));
   }
 
+  public void clearCfpDevClient(Portal portal) {
+    this.cfpDevClients.remove(portal.getPortalName());
+  }
+
   private CfpDevClient createCfpDevClient(Portal portal) {
     Log.debugf("Creating client for portal %s", portal.getPortalName());
 

@@ -17,11 +17,4 @@ public interface PortalMapper {
   default <T> T fromOptional(Optional<T> optional) {
     return optional.orElse(null);
   }
-
-//  default Portal.Builder fromConfig(CfpPortalConfig portalConfig) {
-//    return Portal.builder()
-//        .baseUrl(portalConfig.baseUrl())
-//        .description(portalConfig.description().orElse(null))
-//        .portalType(portalConfig.portalType());
-//  }
 }

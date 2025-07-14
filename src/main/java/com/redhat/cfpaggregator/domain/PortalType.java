@@ -17,15 +17,25 @@ public enum PortalType {
   /**
    * The cfp.dev portal(s), which includes platforms such as Devoxx and VoxxedDays.
    */
-  CFP_DEV,
+  CFP_DEV("cfp.dev"),
 
   /**
    * The Sessionize platform as a type of portal in the CFP configuration.
    */
-  SESSIONIZE,
+  SESSIONIZE("sessionize.com"),
 
   /**
    * The Dev2Next platform as a type of portal in the CFP configuration.
    */
-  DEV2NEXT
+  DEV2NEXT("dev2next");
+
+  private final String description;
+
+  PortalType(String description) {
+    this.description = description;
+  }
+
+  public String getDescription() {
+    return description;
+  }
 }

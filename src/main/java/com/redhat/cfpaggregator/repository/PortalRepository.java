@@ -13,6 +13,17 @@ import com.redhat.cfpaggregator.domain.Talk;
 @ApplicationScoped
 @Transactional
 public class PortalRepository implements PanacheRepositoryBase<Portal, String> {
+  public Portal updatePortal(Portal updatedPortal) {
+    var portal = findById(updatedPortal.getPortalName());
+    portal.setEvent(portal.getEvent());
+    portal.setBaseUrl(updatedPortal.getBaseUrl());
+    portal.setDescription(updatedPortal.getDescription());
+    portal.setPortalType(updatedPortal.getPortalType());
+    persist(portal);
+
+    return portal;
+  }
+
   /**
    * Deletes all {@link Event} entities from the repository and cascades the operation
    * to related entities such as {@link Speaker} and {@link Talk}.
