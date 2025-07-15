@@ -76,8 +76,20 @@ public class CfpService {
   }
 
   public void deletePortal(String portalName) {
-    this.portalRepository.deleteById(portalName);
-    this.portalRepository.flush();
+    Log.debugf("Deleting portal %s", portalName);
+    Optional.ofNullable(portalName)
+        .map(String::strip)
+        .filter(name -> !name.isBlank())
+        .ifPresent(name -> {
+          this.portalRepository.deleteById(name);
+          this.portalRepository.flush();
+        });
+  }
+
+  public void deletePortal(Portal portal) {
+    Optional.ofNullable(portal)
+        .map(Portal::getPortalName)
+        .ifPresent(this::deletePortal);
   }
 
   public Optional<Portal> getPortal(String portalName) {
@@ -85,8 +97,15 @@ public class CfpService {
   }
 
   public Portal savePortal(Portal updatedPortal) {
+    Log.debugf("Updating portal %s", updatedPortal.getPortalName());
     var portal = this.portalRepository.updatePortal(updatedPortal);
     this.clientProducer.clearCfpDevClient(portal);
+    return portal;
+  }
+
+  public Portal createPortal(Portal portal) {
+    Log.debugf("Creating portal %s", portal.getPortalName());
+    this.portalRepository.persist(portal);
     return portal;
   }
 

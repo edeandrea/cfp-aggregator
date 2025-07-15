@@ -11,11 +11,13 @@ quarkus:
       - yaml
       - properties
       - sql
+      - cfpimport
     content-types:
       yml: application/yaml
       yaml: application/yaml
       properties: text/properties
       sql: application/sql
+      cfpimport: application/cfp-import
 
   # Flyway
   flyway:

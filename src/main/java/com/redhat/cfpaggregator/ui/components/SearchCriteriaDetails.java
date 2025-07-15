@@ -2,8 +2,6 @@ package com.redhat.cfpaggregator.ui.components;
 
 import java.util.Optional;
 
-import com.redhat.cfpaggregator.ui.views.SearchCriteria;
-import com.vaadin.flow.component.HasText;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -12,13 +10,14 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.grid.dataview.GridListDataView;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.ListDataProvider;
+
+import com.redhat.cfpaggregator.ui.views.SearchCriteria;
 
 public final class SearchCriteriaDetails extends Details {
   public SearchCriteriaDetails(String title, ListDataProvider<SearchCriteria> dataProvider) {
@@ -134,33 +133,6 @@ public final class SearchCriteriaDetails extends Details {
 
     private void handleCancelButtonClick() {
       close();
-    }
-  }
-
-  private static class ValidationMessage extends HorizontalLayout implements HasText {
-    private final Span span = new Span();
-
-    public ValidationMessage() {
-      setVisible(false);
-      setAlignItems(Alignment.CENTER);
-      getStyle().set("color", "var(--lumo-error-text-color)");
-      getThemeList().clear();
-      getThemeList().add("spacing-s");
-
-      var icon = VaadinIcon.EXCLAMATION_CIRCLE_O.create();
-      icon.setSize("16px");
-      add(icon, span);
-    }
-
-    @Override
-    public String getText() {
-      return span.getText();
-    }
-
-    @Override
-    public void setText(String text) {
-      span.setText(text);
-      setVisible(text != null && !text.isEmpty());
     }
   }
 }

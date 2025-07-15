@@ -38,13 +38,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
-import com.vaadin.flow.router.Menu;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.Command;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 import com.redhat.cfpaggregator.config.CfpPortalsConfig;
 import com.redhat.cfpaggregator.domain.Event;
@@ -63,9 +59,9 @@ import com.redhat.cfpaggregator.ui.views.EventSortBy;
 import com.redhat.cfpaggregator.ui.views.EventViews.EventName;
 import com.redhat.cfpaggregator.ui.views.SearchCriteria;
 
-@PageTitle("CFP Aggregator")
-@Route("")
-@Menu(order = 0, icon = LineAwesomeIconUrl.PENCIL_RULER_SOLID)
+//@PageTitle("CFP Aggregator")
+//@Route("")
+//@Menu(order = 0, icon = LineAwesomeIconUrl.PENCIL_RULER_SOLID)
 public class MainView extends VerticalLayout {
   private static final DateTimeFormatter M_D_Y_FORMATTER = DateTimeFormatter.ofPattern("MMMM d, yyyy");
   private static final DateTimeFormatter M_Y_FORMATTER = DateTimeFormatter.ofPattern("MMMM yyyy");

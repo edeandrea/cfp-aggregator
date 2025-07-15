@@ -2,6 +2,7 @@ package com.redhat.cfpaggregator.ui.components;
 
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import com.vaadin.flow.component.Key;
@@ -124,7 +125,9 @@ public final class EventDetailsForm extends Dialog {
     this.cancelButton.addClickListener(event -> {
       this.portal = null;
       close();
-      this.onPortalSaveCancelled.run();
+
+      Optional.ofNullable(this.onPortalSaveCancelled)
+          .ifPresent(Runnable::run);
     });
   }
 

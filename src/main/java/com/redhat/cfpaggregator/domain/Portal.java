@@ -65,6 +65,10 @@ public class Portal {
     return new Builder(this);
   }
 
+  public Builder toBuilderWithoutEvent() {
+    return new Builder(this, null);
+  }
+
   // Getters and setters
   public String getPortalName() {
     return portalName;
@@ -113,13 +117,17 @@ public class Portal {
   public Portal cloneAsNew() {
     return (this.event != null) ?
         cloneAsNewWithNewEvent(this.event.cloneAsNew()) :
-        cloneAsNewWithNewEvent(null);
+        cloneAsNewWithoutEvent();
   }
 
   public Portal cloneAsNewWithNewEvent(Event event) {
     return toBuilder()
         .event(event)
         .build();
+  }
+
+  public Portal cloneAsNewWithoutEvent() {
+    return toBuilderWithoutEvent().build();
   }
 
   @Override
@@ -155,11 +163,15 @@ public class Portal {
     }
 
     private Builder(Portal portal) {
+      this(portal, portal.event);
+    }
+
+    private Builder(Portal portal, Event event) {
       this.portalName = portal.portalName;
       this.baseUrl = portal.baseUrl;
       this.description = portal.description;
       this.portalType = portal.portalType;
-      this.event = portal.event;
+      this.event = event;
     }
 
     public Builder portalName(String portalName) {
