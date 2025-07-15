@@ -1,4 +1,4 @@
-package com.redhat.cfpaggregator.ui.templates;
+package com.redhat.cfpaggregator.templates;
 
 import java.util.Collection;
 

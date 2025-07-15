@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redhat.cfpaggregator.domain.Portal;
-import com.redhat.cfpaggregator.ui.templates.ExportConfigTemplates;
+import com.redhat.cfpaggregator.templates.ExportConfigTemplates;
 
 public enum ExportFormat {
   APP_IMPORT("Application import", "application/cfp-import", ".cfpimport") {
