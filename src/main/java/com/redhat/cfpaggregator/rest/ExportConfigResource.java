@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 import com.redhat.cfpaggregator.service.CfpService;
-import com.redhat.cfpaggregator.ui.components.ExportFormat;
+import com.redhat.cfpaggregator.service.ExportFormat;
 
 @Path("/export/config")
 public class ExportConfigResource {

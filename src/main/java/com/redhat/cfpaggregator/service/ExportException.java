@@ -1,4 +1,4 @@
-package com.redhat.cfpaggregator.ui.components;
+package com.redhat.cfpaggregator.service;
 
 public class ExportException extends RuntimeException {
   public ExportException(String message) {

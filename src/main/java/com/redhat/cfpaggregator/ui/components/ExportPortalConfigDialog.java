@@ -12,6 +12,8 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 
 import com.redhat.cfpaggregator.domain.Portal;
+import com.redhat.cfpaggregator.service.ExportException;
+import com.redhat.cfpaggregator.service.ExportFormat;
 
 public final class ExportPortalConfigDialog extends Dialog {
   private static final String DOWNLOAD_URI_TEMPLATE = "/export/config/portalsConfig%s";

@@ -1,4 +1,4 @@
-package com.redhat.cfpaggregator.ui.components;
+package com.redhat.cfpaggregator.service;
 
 import java.util.Arrays;
 import java.util.Collection;
