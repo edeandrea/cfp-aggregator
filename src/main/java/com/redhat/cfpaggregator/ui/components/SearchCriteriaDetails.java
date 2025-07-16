@@ -14,7 +14,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.provider.ListDataProvider;
 
 import com.redhat.cfpaggregator.ui.views.SearchCriteria;
@@ -24,6 +23,7 @@ public final class SearchCriteriaDetails extends Details {
     super(title);
 
     var grid = createGrid(dataProvider);
+    add(grid);
     add(new Button("Add", event -> new AddKeywordDialog(title, grid.getListDataView()).open()));
     setWidthFull();
     setHeight("min-content");
@@ -32,64 +32,23 @@ public final class SearchCriteriaDetails extends Details {
 
   private Grid<SearchCriteria> createGrid(ListDataProvider<SearchCriteria> dataProvider) {
     var grid = new Grid<>(SearchCriteria.class, false);
-    grid.getStyle().set("--vaadin-grid-cell-padding", "1px");
     grid.setAllRowsVisible(false);
     grid.setHeight("200px");
     grid.addThemeVariants(GridVariant.LUMO_COMPACT, GridVariant.LUMO_NO_ROW_BORDERS);
 
-    var editor = grid.getEditor();
-    var keywordColumn = grid
+    grid
         .addColumn(SearchCriteria::getKeyword)
         .setAutoWidth(true);
 
-    var editColumn = grid.addComponentColumn(criteria ->
-            new Button("Edit", e -> {
-              if (editor.isOpen()) {
-                editor.cancel();
-              }
-
-              editor.editItem(criteria);
-            })
-        )
-        .setWidth("150px")
-        .setFlexGrow(0);
-
     grid.addComponentColumn(criteria ->
-            new Button("Delete", e -> {
-              if (editor.isOpen()) {
-                editor.cancel();
-              }
-
+            new Button(VaadinIcon.TRASH.create(), e -> {
               grid.getListDataView().removeItem(criteria);
             })
         )
         .setWidth("150px")
         .setFlexGrow(0);
 
-    var binder = new Binder<>(SearchCriteria.class);
-    editor.setBinder(binder);
-    editor.setBuffered(true);
-
-    var validationMessage = new ValidationMessage();
-    var keywordField = new TextField();
-    keywordField.setWidthFull();
-    binder.forField(keywordField)
-        .asRequired("%s can't be empty".formatted(getSummaryText()))
-        .withStatusLabel(validationMessage)
-        .bind(SearchCriteria::getKeyword, SearchCriteria::setKeyword);
-    keywordColumn.setEditorComponent(keywordField);
-
-    var saveButton = new Button("Save", e -> editor.save());
-    var cancelButton = new Button(VaadinIcon.CLOSE.create(), e -> editor.cancel());
-    cancelButton.addThemeVariants(ButtonVariant.LUMO_ICON);
-    var actions = new HorizontalLayout(saveButton, cancelButton);
-    actions.setPadding(false);
-    editColumn.setEditorComponent(actions);
-
-    editor.addCancelListener(e -> validationMessage.setText(""));
     grid.setItems(dataProvider);
-
-    add(grid, validationMessage);
 
     return grid;
   }

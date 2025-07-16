@@ -1,10 +1,13 @@
 package com.redhat.cfpaggregator.domain;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -153,6 +156,15 @@ public class Event {
     return description;
   }
 
+  public String getEventOrPortalDescription() {
+    return Optional.ofNullable(this.description)
+        .or(() ->
+            Optional.ofNullable(this.portal)
+                .map(Portal::getDescription)
+        )
+        .orElse(null);
+  }
+
   public void setDescription(String description) {
     this.description = description;
   }
@@ -163,6 +175,10 @@ public class Event {
 
   public void setFlickrUrl(String flickrUrl) {
     this.flickrUrl = flickrUrl;
+  }
+
+  public LocalDate getLocalFromDate() {
+    return convert(this.fromDate);
   }
 
   public Instant getFromDate() {
@@ -179,6 +195,10 @@ public class Event {
 
   public void setTimeZone(String timeZone) {
     this.timeZone = timeZone;
+  }
+
+  public LocalDate getLocalToDate() {
+    return convert(this.toDate);
   }
 
   public Instant getToDate() {
@@ -213,12 +233,24 @@ public class Event {
     this.portal = portal;
   }
 
+  public LocalDate getLocalCfpOpening() {
+    return convert(this.cfpOpening);
+  }
+
   public Instant getCfpOpening() {
     return cfpOpening;
   }
 
   public void setCfpOpening(Instant cfpOpening) {
     this.cfpOpening = cfpOpening;
+  }
+
+  private LocalDate convert(Instant instant) {
+    return instant.atZone(ZoneId.systemDefault()).toLocalDate();
+  }
+
+  public LocalDate getLocalCfpClosing() {
+    return convert(this.cfpClosing);
   }
 
   public Instant getCfpClosing() {

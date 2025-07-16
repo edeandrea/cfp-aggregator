@@ -45,12 +45,15 @@ public class MainLayout extends AppLayout {
 
     var titleLayout = new HorizontalLayout(this.switchThemeButton, new H1("CFP Aggregator"));
     titleLayout.setSpacing(true);
+
+    setDrawerOpened(false);
     addToNavbar(new DrawerToggle(), titleLayout);
 
     var scroller = new Scroller(createNav());
     scroller.setClassName(Padding.SMALL);
     addToDrawer(scroller);
-    setPrimarySection(Section.DRAWER);
+
+    UI.getCurrent().access(() -> UI.getCurrent().navigate(SearchEventsView.class));
   }
 
   private void toggleLightDarkTheme() {
@@ -68,6 +71,7 @@ public class MainLayout extends AppLayout {
 
   private SideNav createNav() {
     var nav = new SideNav();
+
     nav.addItem(
         new SideNavItem("Manage Portals", ManagePortalsView.class, VaadinIcon.COG.create()),
         new SideNavItem("Search Events", SearchEventsView.class, VaadinIcon.SEARCH.create())

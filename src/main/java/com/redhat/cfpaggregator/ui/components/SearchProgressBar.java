@@ -23,7 +23,7 @@ public final class SearchProgressBar extends VerticalLayout {
     this.progressBar.setIndeterminate(true);
 
     add(this.label, this.progressBar);
-    parent.getStyle().set("position", "relative");
+    parent.getElement().getStyle().set("position", "relative");
     parent.add(this);
   }
 

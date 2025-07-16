@@ -29,7 +29,6 @@ import com.redhat.cfpaggregator.mapping.TalkMapper;
 import com.redhat.cfpaggregator.mapping.TalkSearchCriteriaMapper;
 import com.redhat.cfpaggregator.repository.EventRepository;
 import com.redhat.cfpaggregator.repository.PortalRepository;
-import com.redhat.cfpaggregator.ui.views.EventViews.EventName;
 
 @ApplicationScoped
 @Transactional
@@ -214,10 +213,17 @@ public class CfpService {
     return event;
   }
 
-  public List<EventName> getEvents() {
-    return this.eventRepository.findAll()
-        .project(EventName.class)
-        .list();
+  public List<Event> getEvents() {
+    return this.eventRepository.listAll();
+  }
+
+  public List<Event> getFullyPopulatedEvents() {
+    var events = this.eventRepository.listAll();
+
+    // Need to trigger lazy initialization
+    events.forEach(Event::getTalkCount);
+
+    return events;
   }
 
   public Event getFullyPopulatedEvent(String portalName) {
