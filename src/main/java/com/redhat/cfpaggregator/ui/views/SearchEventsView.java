@@ -22,6 +22,7 @@ import com.vaadin.flow.component.details.DetailsVariant;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
+import com.vaadin.flow.component.grid.GridSortOrder;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.AnchorTarget;
@@ -73,7 +74,7 @@ public class SearchEventsView extends SplitLayout {
     addToPrimary(createSearchCriteriaView());
     addToSecondary(createSearchResultsView());
 
-    setSplitterPosition(20);
+    setSplitterPosition(15);
   }
 
   private Component createSearchCriteriaView() {
@@ -135,7 +136,7 @@ public class SearchEventsView extends SplitLayout {
         .setAutoWidth(true)
         .setFlexGrow(0);
 
-    grid.addColumn(new LocalDateRenderer<>(Event::getLocalFromDate))
+    var fromDateColumn = grid.addColumn(new LocalDateRenderer<>(Event::getLocalFromDate))
         .setHeader("Event Date")
         .setResizable(true)
         .setSortable(true)
@@ -176,6 +177,7 @@ public class SearchEventsView extends SplitLayout {
     numSpeakersColumn.setKey("numSpeakersColumn");
 
     grid.addSelectionListener(this::handleEventSelection);
+    grid.sort(GridSortOrder.asc(fromDateColumn).build());
 
     return grid;
   }

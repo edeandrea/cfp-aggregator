@@ -76,46 +76,46 @@ quarkus:
 # Dev and test modes config
 '%dev,test':
   cfps:
-#    reload-on-startup: true
+    reload-on-startup: true
     log-requests: true
     log-responses: true
-#    portals:
-#      devoxxuk2025:
-#        base-url: http://localhost:${quarkus.wiremock.devservices.port}
-#        portal-type: cfp-dev
-#        description: Devoxx UK 2025
-#      devoxxpl25:
-#        base-url: http://localhost:${quarkus.wiremock.devservices.port}
-#        portal-type: cfp-dev
-#        description: Devoxx Poland 2025
-#      voxxedlu2025:
-#        base-url: http://localhost:${quarkus.wiremock.devservices.port}
-#        portal-type: cfp-dev
-#        description: Voxxed Days Luxembourg 2025
-#      devoxxfr2025:
-#        base-url: http://localhost:${quarkus.wiremock.devservices.port}
-#        portal-type: cfp-dev
-#        description: Devoxx France 2025
-#      dvgr25:
-#        base-url: http://localhost:${quarkus.wiremock.devservices.port}
-#        portal-type: cfp-dev
-#        description: Devoxx Greece 2025
-#      vdams25:
-#        base-url: http://localhost:${quarkus.wiremock.devservices.port}
-#        portal-type: cfp-dev
-#        description: Voxxed Days Amsterdam 2025
-#      vdbuh2025:
-#        base-url: http://localhost:${quarkus.wiremock.devservices.port}
-#        portal-type: cfp-dev
-#        description: Voxxed Days Bucharest 2025
-#      dvbe25:
-#        base-url: http://localhost:${quarkus.wiremock.devservices.port}
-#        portal-type: cfp-dev
-#        description: Devoxx Belgium 2025
-#      dvma25:
-#        base-url: http://localhost:${quarkus.wiremock.devservices.port}
-#        portal-type: cfp-dev
-#        description: Devoxx Morocco 2025
+    portals:
+      devoxxuk2025:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx UK 2025
+      devoxxpl25:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx Poland 2025
+      voxxedlu2025:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Voxxed Days Luxembourg 2025
+      devoxxfr2025:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx France 2025
+      dvgr25:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx Greece 2025
+      vdams25:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Voxxed Days Amsterdam 2025
+      vdbuh2025:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Voxxed Days Bucharest 2025
+      dvbe25:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx Belgium 2025
+      dvma25:
+        base-url: http://localhost:${quarkus.wiremock.devservices.port}
+        portal-type: cfp-dev
+        description: Devoxx Morocco 2025
 
   quarkus:
     observability:

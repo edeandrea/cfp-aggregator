@@ -163,7 +163,9 @@ public class CfpService {
 
     Uni.join()
         .all(unis)
-        .andFailFast()
+        .andCollectFailures()
+        .onFailure().invoke(t -> Log.errorf(t, "Failed to create events"))
+//        .andFailFast()
         .await().atMost(this.config.timeout().multipliedBy(portals.size()));
 
     this.portalRepository.persist(portals);

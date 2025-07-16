@@ -1,6 +1,8 @@
 package com.redhat.cfpaggregator.client.cfpdev;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -69,7 +71,9 @@ public interface CfpDevClient {
     var talksStream = searchCriteria.hasTalkKeywords() ?
         searchCriteria.getTalkKeywords().stream()
             .flatMap(keyword -> findTalks(keyword, portalName).talks().stream()) :
-        getAllTalks(portalName).stream();
+        Optional.ofNullable(getAllTalks(portalName))
+            .map(List::stream)
+            .orElseGet(Stream::empty);
 
     // 2) For each talk, only retain the speakers that match the search criteria (if there is any)
     return searchCriteria.hasSpeakerCompanies() ?

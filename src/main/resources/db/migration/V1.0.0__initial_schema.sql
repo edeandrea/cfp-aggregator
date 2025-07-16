@@ -1,9 +1,9 @@
--- Drop tables
+-- Drop tables and sequences
 drop table if exists events cascade;
 drop table if exists portals cascade;
 drop table if exists speaker_talks cascade;
 drop table if exists speakers cascade;
-drop table if exists talks cascade ;
+drop table if exists talks cascade;
 drop sequence if exists speaker_seq;
 drop sequence if exists talk_seq;
 
@@ -13,24 +13,24 @@ create sequence talk_seq start with 1 increment by 1;
 
 -- Create tables
 create table events (
+		portal_name varchar(255) not null,
 		cfp_closing timestamp(6) with time zone,
 		cfp_opening timestamp(6) with time zone,
-		from_date timestamp(6) with time zone,
-		to_date timestamp(6) with time zone,
 		description TEXT,
 		flickr_url varchar(255),
+		from_date timestamp(6) with time zone,
 		name varchar(255) not null,
-		portal_name varchar(255) not null,
 		time_zone varchar(255),
-		website_url varchar(255),
-		you_tube_url varchar(255),
+		to_date timestamp(6) with time zone,
+		website_url TEXT,
+		you_tube_url TEXT,
 		primary key (portal_name)
 );
 
 create table portals (
+		portal_name varchar(255) not null,
 		base_url varchar(255) not null,
 		description TEXT,
-		portal_name varchar(255) not null,
 		portal_type enum ('CFP_DEV','DEV2NEXT','SESSIONIZE') not null,
 		primary key (portal_name)
 );
@@ -41,25 +41,25 @@ create table speaker_talks (
 );
 
 create table speakers (
-		event_speaker_id bigint not null,
 		id bigint not null,
 		bio TEXT,
 		bluesky_username varchar(255),
 		company varchar(255),
 		country_name varchar(255),
-		event_portal_name varchar(255) not null,
+		event_speaker_id bigint not null,
 		first_name varchar(255) not null,
-		image_url varchar(255),
+		image_url TEXT,
 		last_name varchar(255) not null,
 		linked_in_username varchar(255),
 		twitter_handle varchar(255),
+		event_portal_name varchar(255) not null,
 		primary key (id)
 );
 
 create table talks (
-		event_talk_id bigint not null,
 		id bigint not null,
 		description TEXT,
+		event_talk_id bigint not null,
 		summary TEXT,
 		title varchar(255) not null,
 		video_url varchar(255),

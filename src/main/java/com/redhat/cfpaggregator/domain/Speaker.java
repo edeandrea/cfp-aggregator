@@ -47,6 +47,8 @@ public class Speaker {
   @NotEmpty(message = "last_name can not be null or empty")
   private String lastName;
   private String company;
+
+  @Column(columnDefinition = "TEXT")
   private String imageUrl;
   private String twitterHandle;
   private String linkedInUsername;

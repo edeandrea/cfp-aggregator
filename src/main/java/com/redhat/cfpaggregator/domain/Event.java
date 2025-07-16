@@ -44,7 +44,11 @@ public class Event {
   private Instant fromDate;
   private String timeZone;
   private Instant toDate;
+
+  @Column(columnDefinition = "TEXT")
   private String websiteUrl;
+
+  @Column(columnDefinition = "TEXT")
   private String youTubeUrl;
   private Instant cfpOpening;
   private Instant cfpClosing;
