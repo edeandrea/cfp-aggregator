@@ -250,7 +250,9 @@ public class Event {
   }
 
   private LocalDate convert(Instant instant) {
-    return instant.atZone(ZoneId.systemDefault()).toLocalDate();
+    return Optional.ofNullable(instant)
+        .map(ins -> instant.atZone(ZoneId.systemDefault()).toLocalDate())
+        .orElse(null);
   }
 
   public LocalDate getLocalCfpClosing() {

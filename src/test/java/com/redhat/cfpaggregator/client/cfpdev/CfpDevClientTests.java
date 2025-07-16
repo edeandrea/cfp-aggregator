@@ -28,8 +28,11 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.QuarkusTestProfile;
 import io.quarkus.test.junit.TestProfile;
 
+import io.quarkiverse.wiremock.devservice.ConnectWireMock;
+
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.redhat.cfpaggregator.client.ClientProducer;
+import com.redhat.cfpaggregator.client.CfpClient;
+import com.redhat.cfpaggregator.client.ClientManager;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevClientTests.ConfigTestProfile;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevTalkDetails.Keyword;
 import com.redhat.cfpaggregator.config.CfpPortalsConfig;
@@ -37,14 +40,13 @@ import com.redhat.cfpaggregator.domain.Portal;
 import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
 import com.redhat.cfpaggregator.mapping.PortalMapper;
 import com.redhat.cfpaggregator.repository.PortalRepository;
-import io.quarkiverse.wiremock.devservice.ConnectWireMock;
 
 @QuarkusTest
 @TestProfile(ConfigTestProfile.class)
 @ConnectWireMock
 class CfpDevClientTests {
   @Inject
-  ClientProducer clientProducer;
+  ClientManager clientManager;
 
   @Inject
   PortalRepository portalRepository;
@@ -80,8 +82,9 @@ class CfpDevClientTests {
   }
 
   private CfpDevClient getClient(Portal portal) {
-    return assertThat(this.clientProducer.getCfpDevClient(portal))
+    return (CfpDevClient) assertThat(this.clientManager.getCfpClient(portal))
         .isNotNull()
+        .isInstanceOf(CfpDevClient.class)
         .actual();
   }
 
@@ -177,7 +180,7 @@ class CfpDevClientTests {
         1,
         getRequestedFor(urlPathEqualTo("/api/public/event"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
-            .withHeader(ClientProducer.PORTAL_NAME_HEADER, equalTo("portal1"))
+            .withHeader(CfpClient.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
   }
 
@@ -377,7 +380,7 @@ class CfpDevClientTests {
         1,
         getRequestedFor(urlPathEqualTo("/api/public/talks"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
-        .withHeader(ClientProducer.PORTAL_NAME_HEADER, equalTo("portal1"))
+        .withHeader(CfpClient.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
   }
 
@@ -951,7 +954,7 @@ class CfpDevClientTests {
         1,
         getRequestedFor(urlPathEqualTo("/api/public/talks"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
-            .withHeader(ClientProducer.PORTAL_NAME_HEADER, equalTo("portal1"))
+            .withHeader(CfpClient.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
   }
 
@@ -1302,7 +1305,7 @@ class CfpDevClientTests {
         getRequestedFor(urlPathTemplate("/api/public/search/{searchQuery}"))
             .withPathParam("searchQuery", equalTo("quarkus"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
-            .withHeader(ClientProducer.PORTAL_NAME_HEADER, equalTo("portal1"))
+            .withHeader(CfpClient.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
 
     this.wireMock.verifyThat(
@@ -1310,7 +1313,7 @@ class CfpDevClientTests {
         getRequestedFor(urlPathTemplate("/api/public/search/{searchQuery}"))
             .withPathParam("searchQuery", equalTo("spring"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
-            .withHeader(ClientProducer.PORTAL_NAME_HEADER, equalTo("portal1"))
+            .withHeader(CfpClient.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
   }
 

@@ -1,0 +1,24 @@
+{
+  "id" : "66dd0681-bf6f-3446-ac68-3e067d4df19e",
+  "request" : {
+    "url" : "/api/v2/jl4ktls0/view/All",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-api-v2-jl4ktls0-view-All-O8NM8.json",
+    "headers" : {
+      "Strict-Transport-Security" : "max-age=31536000",
+      "Access-Control-Expose-Headers" : "Request-Context",
+      "Cache-Control" : "public, max-age=240",
+      "Access-Control-Allow-Origin" : "*",
+      "Vary" : "*",
+      "Last-Modified" : "Wed, 16 Jul 2025 21:37:49 GMT",
+      "Expires" : "Wed, 16 Jul 2025 21:41:49 GMT",
+      "Date" : "Wed, 16 Jul 2025 21:37:49 GMT",
+      "Request-Context" : "appId=cid-v1:b2e2c870-e93c-4b5e-b327-c68def57aebb",
+      "Content-Type" : "application/json; charset=utf-8"
+    }
+  },
+  "uuid" : "66dd0681-bf6f-3446-ac68-3e067d4df19e"
+}

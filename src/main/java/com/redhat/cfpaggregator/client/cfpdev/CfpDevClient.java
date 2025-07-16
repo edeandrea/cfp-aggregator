@@ -1,6 +1,8 @@
 package com.redhat.cfpaggregator.client.cfpdev;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -15,7 +17,10 @@ import org.eclipse.microprofile.rest.client.annotation.ClientHeaderParam;
 
 import io.quarkus.rest.client.reactive.NotBody;
 
-import com.redhat.cfpaggregator.client.ClientProducer;
+import com.redhat.cfpaggregator.client.CfpClient;
+import com.redhat.cfpaggregator.domain.Event;
+import com.redhat.cfpaggregator.domain.Portal;
+import com.redhat.cfpaggregator.domain.Speaker;
 import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
 
 /**
@@ -26,14 +31,13 @@ import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
 @Path("/api/public")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public interface CfpDevClient {
-
+public interface CfpDevClient extends CfpClient {
   /**
    * Fetches the details of an event from the cfp.dev API.
    */
   @GET
   @Path("/event")
-  @ClientHeaderParam(name = ClientProducer.PORTAL_NAME_HEADER, value = "{portalName}")
+  @ClientHeaderParam(name = CfpClient.PORTAL_NAME_HEADER, value = "{portalName}")
   CfpDevEventDetails getEventDetails(@NotBody String portalName);
 
   /**
@@ -45,7 +49,7 @@ public interface CfpDevClient {
    */
   @GET
   @Path("/search/{searchQuery}")
-  @ClientHeaderParam(name = ClientProducer.PORTAL_NAME_HEADER, value = "{portalName}")
+  @ClientHeaderParam(name = CfpClient.PORTAL_NAME_HEADER, value = "{portalName}")
   CfpDevTalkSearchResults findTalks(@PathParam("searchQuery") String searchQuery, @NotBody String portalName);
 
   /**
@@ -55,7 +59,7 @@ public interface CfpDevClient {
    */
   @GET
   @Path("/talks")
-  @ClientHeaderParam(name = ClientProducer.PORTAL_NAME_HEADER, value = "{portalName}")
+  @ClientHeaderParam(name = CfpClient.PORTAL_NAME_HEADER, value = "{portalName}")
   List<CfpDevTalkDetails> getAllTalks(@NotBody String portalName);
 
   /**
@@ -82,5 +86,38 @@ public interface CfpDevClient {
             .filter(talk -> !talk.speakers().isEmpty())
             .toList() :
         talksStream.toList();
+  }
+
+  @Override
+  default Event createEvent(Portal portal, TalkSearchCriteria talkSearchCriteria) {
+    var portalName = portal.getPortalName();
+    var eventDetails = getEventDetails(portal.getPortalName());
+    var event = EVENT_MAPPER.fromCfpDev(portalName, eventDetails);
+
+    if (eventDetails != null) {
+      var talks = findTalks(talkSearchCriteria, portalName);
+
+      if (talks != null) {
+        var uniqueSpeakers = new HashMap<String, Speaker>();
+
+        talks.forEach(talk -> {
+          var speakers = talk.speakers();
+
+          if (speakers != null) {
+            var mappedTalk = TALK_MAPPER.fromCfpDev(talk);
+            speakers.stream()
+                .filter(Objects::nonNull)
+                .map(speaker -> uniqueSpeakers.computeIfAbsent(String.valueOf(speaker.eventSpeakerId()), id -> SPEAKER_MAPPER.fromCfpDev(speaker)))
+                .forEach(speaker -> {
+                  event.addSpeakers(speaker);
+                  speaker.addTalks(mappedTalk);
+                });
+          }
+        });
+      }
+    }
+
+    portal.setEvent(event);
+    return event;
   }
 }

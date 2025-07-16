@@ -25,13 +25,15 @@ public class Talk {
   private Long id;
 
   @NotNull(message = "event_talk_id can not be null")
-  private Long eventTalkId;
+  private String eventTalkId;
 
   @NotEmpty
   private String title;
 
   @Column(columnDefinition = "TEXT")
   private String description;
+
+  @Column(columnDefinition = "TEXT")
   private String videoUrl;
 
   @Column(columnDefinition = "TEXT")
@@ -163,17 +165,17 @@ public class Talk {
     }
   }
 
-  public Long getEventTalkId() {
+  public String getEventTalkId() {
     return eventTalkId;
   }
 
-  public void setEventTalkId(Long talkId) {
+  public void setEventTalkId(String talkId) {
     this.eventTalkId = talkId;
   }
 
   public static final class Builder {
     private Long id;
-    private Long eventTalkId;
+    private String eventTalkId;
     private String title;
     private String description;
     private String videoUrl;
@@ -198,7 +200,7 @@ public class Talk {
       return this;
     }
 
-    public Builder eventTalkId(Long eventTalkId) {
+    public Builder eventTalkId(String eventTalkId) {
       this.eventTalkId = eventTalkId;
       return this;
     }

@@ -77,7 +77,6 @@ public class ManagePortalsView extends VerticalLayout {
     grid.setEmptyStateText("No portals found. Please configure some.");
 
     var editor = grid.getEditor();
-
     var editColumn = grid.addComponentColumn(portal -> {
               var editButton = new Button(VaadinIcon.EDIT.create(), e -> {
                 if (editor.isOpen()) {
@@ -114,15 +113,15 @@ public class ManagePortalsView extends VerticalLayout {
         .setAutoWidth(true)
         .setFlexGrow(0);
 
-    var baseUrlColumn = grid.addColumn(PortalWrapper::getBaseUrl)
-        .setHeader("Base URL")
+    var portalTypeColumn = grid.addColumn(portal -> Optional.ofNullable(portal.getPortalType()).map(PortalType::getDescription).orElse(""))
+        .setHeader("Portal Type")
         .setResizable(true)
         .setSortable(true)
         .setAutoWidth(true)
         .setFlexGrow(0);
 
-    var portalTypeColumn = grid.addColumn(portal -> Optional.ofNullable(portal.getPortalType()).map(PortalType::getDescription).orElse(""))
-        .setHeader("Portal Type")
+    var baseUrlColumn = grid.addColumn(PortalWrapper::getBaseUrl)
+        .setHeader("Base URL")
         .setResizable(true)
         .setSortable(true)
         .setAutoWidth(true)
@@ -159,7 +158,20 @@ public class ManagePortalsView extends VerticalLayout {
     var portalTypeListDataProvider = DataProvider.ofCollection(EnumSet.allOf(PortalType.class));
     portalTypeListDataProvider.setSortComparator(Comparator.comparing(PortalType::getDescription)::compare);
 
-    var portalTypeField = new Select<PortalType>();
+    var portalTypeField = new Select<PortalType>(e -> {
+      var portal = editor.getItem();
+      var portalType = e.getValue();
+      var baseUrl = Optional.ofNullable(portal.getBaseUrl())
+          .map(String::strip)
+          .orElse("");
+
+      if ("".equals(baseUrl) && portalType.hasDefaultUrl()) {
+        var defaultUrl = portalType.getDefaultUrl();
+        baseUrlField.setValue(defaultUrl);
+        portal.setBaseUrl(defaultUrl);
+        editor.refresh();
+      }
+    });
     portalTypeField.setDataProvider(portalTypeListDataProvider);
     portalTypeField.setItemLabelGenerator(PortalType::getDescription);
     portalTypeField.setRequiredIndicatorVisible(true);

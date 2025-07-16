@@ -39,7 +39,7 @@ public class Speaker {
   private Long id;
 
   @NotNull(message = "event_speaker_id can not be null")
-  private Long eventSpeakerId;
+  private String eventSpeakerId;
 
   @NotEmpty(message = "first_name can not be null or empty")
   private String firstName;
@@ -170,7 +170,6 @@ public class Speaker {
             .map(Event::getPortalName)
             .map(portalName -> ", eventPortalName=" + portalName)
             .orElse("") +
-        ", eventPortalName=" + event.getPortalName() +
         ", talks=" + talks +
         '}';
   }
@@ -278,17 +277,17 @@ public class Speaker {
     return this.talks;
   }
 
-  public Long getEventSpeakerId() {
+  public String getEventSpeakerId() {
     return eventSpeakerId;
   }
 
-  public void setEventSpeakerId(Long speakerId) {
+  public void setEventSpeakerId(String speakerId) {
     this.eventSpeakerId = speakerId;
   }
 
   public static final class Builder {
     private Long id;
-    private Long eventSpeakerId;
+    private String eventSpeakerId;
     private String firstName;
     private String lastName;
     private String company;
@@ -324,7 +323,7 @@ public class Speaker {
       return this;
     }
 
-    public Builder eventSpeakerId(Long eventSpeakerId) {
+    public Builder eventSpeakerId(String eventSpeakerId) {
       this.eventSpeakerId = eventSpeakerId;
       return this;
     }

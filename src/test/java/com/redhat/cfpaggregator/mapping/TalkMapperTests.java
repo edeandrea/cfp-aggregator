@@ -48,7 +48,7 @@ class TalkMapperTests {
     );
 
     var expectedTalk = Talk.builder()
-        .eventTalkId(987654321L)
+        .eventTalkId("987654321")
         .title("Talk title")
         .description("Talk description")
         .summary("Talk summary")

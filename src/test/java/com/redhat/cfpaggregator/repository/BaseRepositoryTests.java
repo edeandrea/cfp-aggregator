@@ -40,7 +40,7 @@ abstract class BaseRepositoryTests {
             
             I hope you like it!
             """)
-      .eventSpeakerId(1234567890L)
+      .eventSpeakerId("1234567890")
       .blueskyUsername("ericdeandrea.dev")
       .twitterHandle("@edeandrea")
       .linkedInUsername("edeandrea")
@@ -51,7 +51,7 @@ abstract class BaseRepositoryTests {
       .build();
 
   protected static final Talk TALK = Talk.builder()
-      .eventTalkId(6586L)
+      .eventTalkId("6586")
       .title("Some talk title")
       .description("Some fun talk")
       .videoUrl("https://www.youtube.com")

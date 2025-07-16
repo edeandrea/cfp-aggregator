@@ -6,7 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record SessionizeSpeakerDetails(
-  @JsonProperty("id") String id,
+  @JsonProperty("id") String eventSpeakerId,
   @JsonProperty("firstName") String firstName,
   @JsonProperty("lastName") String lastName,
   @JsonProperty("bio") String bio,

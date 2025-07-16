@@ -46,7 +46,7 @@ create table speakers (
 		bluesky_username varchar(255),
 		company varchar(255),
 		country_name varchar(255),
-		event_speaker_id bigint not null,
+		event_speaker_id varchar(255) not null,
 		first_name varchar(255) not null,
 		image_url TEXT,
 		last_name varchar(255) not null,
@@ -59,10 +59,10 @@ create table speakers (
 create table talks (
 		id bigint not null,
 		description TEXT,
-		event_talk_id bigint not null,
+		event_talk_id varchar(255) not null,
 		summary TEXT,
 		title varchar(255) not null,
-		video_url varchar(255),
+		video_url TEXT,
 		primary key (id)
 );
 
