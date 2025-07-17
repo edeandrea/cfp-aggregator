@@ -1,4 +1,4 @@
-package com.redhat.cfpaggregator.config;
+package com.redhat.cfpaggregator.ui;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.component.page.Push;

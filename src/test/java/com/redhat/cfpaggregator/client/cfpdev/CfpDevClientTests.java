@@ -17,89 +17,37 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import jakarta.inject.Inject;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response.Status;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.QuarkusTestProfile;
 import io.quarkus.test.junit.TestProfile;
 
-import io.quarkiverse.wiremock.devservice.ConnectWireMock;
-
-import com.github.tomakehurst.wiremock.client.WireMock;
 import com.redhat.cfpaggregator.client.CfpClient;
-import com.redhat.cfpaggregator.client.ClientManager;
+import com.redhat.cfpaggregator.client.CfpClientTests;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevClientTests.ConfigTestProfile;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevTalkDetails.Keyword;
-import com.redhat.cfpaggregator.config.CfpPortalsConfig;
-import com.redhat.cfpaggregator.domain.Portal;
 import com.redhat.cfpaggregator.domain.TalkSearchCriteria;
-import com.redhat.cfpaggregator.mapping.PortalMapper;
-import com.redhat.cfpaggregator.repository.PortalRepository;
 
 @QuarkusTest
 @TestProfile(ConfigTestProfile.class)
-@ConnectWireMock
-class CfpDevClientTests {
-  @Inject
-  ClientManager clientManager;
-
-  @Inject
-  PortalRepository portalRepository;
-
-  @Inject
-  PortalMapper portalMapper;
-
-  @Inject
-  CfpPortalsConfig cfpPortalsConfig;
-
-  WireMock wireMock;
-
-  @BeforeEach
-  void beforeEach() {
-    this.wireMock.resetToDefaultMappings();
-    this.portalRepository.deleteAllWithCascade();
-
-    this.cfpPortalsConfig.portals()
-        .entrySet()
-        .stream()
-        .map(entry -> this.portalMapper.fromConfig(entry.getKey(), entry.getValue()))
-        .forEach(this.portalRepository::persistAndFlush);
-
-    assertThat(this.portalRepository.count()).isGreaterThanOrEqualTo(1);
-  }
-
-  private CfpDevClient getClient() {
-    return getClient("portal1");
-  }
-
-  private CfpDevClient getClient(String portalName) {
-    return getClient(this.portalRepository.findById(portalName));
-  }
-
-  private CfpDevClient getClient(Portal portal) {
-    return (CfpDevClient) assertThat(this.clientManager.getCfpClient(portal))
-        .isNotNull()
-        .isInstanceOf(CfpDevClient.class)
-        .actual();
-  }
-
-  @Test
-  void hasCorrectClients() {
-    assertThat(this.portalRepository.listAll())
-        .isNotNull()
-        .filteredOn(Portal::getPortalName, "portal1")
-        .map(this::getClient)
-        .singleElement()
-        .isInstanceOf(CfpDevClient.class);
+class CfpDevClientTests extends CfpClientTests<CfpDevClient> {
+  CfpDevClientTests() {
+    super(CfpDevClient.class);
   }
 
   @Test
   void eventDetails() throws MalformedURLException {
+
+  }
+
+  @Override
+  @Test
+  public void createEventNoKeywordsNoSpeakers() throws MalformedURLException {
     this.wireMock.register(get(urlPathEqualTo("/api/public/event"))
         .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
         .willReturn(jsonResponse("""
@@ -176,16 +124,6 @@ class CfpDevClientTests {
             new URL("https://www.youtube.com/channel/UCxIamwHotqAAdmecaKT9WpA")
         ));
 
-    this.wireMock.verifyThat(
-        1,
-        getRequestedFor(urlPathEqualTo("/api/public/event"))
-            .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
-            .withHeader(CfpClient.PORTAL_NAME_HEADER, equalTo("portal1"))
-    );
-  }
-
-  @Test
-  void findTalksNoKeywordsNoSpeakers() throws MalformedURLException {
     this.wireMock.register(get(urlPathEqualTo("/api/public/talks"))
         .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
         .willReturn(jsonResponse("""
@@ -315,7 +253,7 @@ class CfpDevClientTests {
                 "timeSlots": []
               }
             ]
-            """, 200)));
+            """, Status.OK.getStatusCode())));
 
     assertThat(getClient().findTalks(TalkSearchCriteria.builder().build(), "portal1"))
         .isNotNull()
@@ -381,6 +319,13 @@ class CfpDevClientTests {
         getRequestedFor(urlPathEqualTo("/api/public/talks"))
             .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
         .withHeader(CfpClient.PORTAL_NAME_HEADER, equalTo("portal1"))
+    );
+
+    this.wireMock.verifyThat(
+        1,
+        getRequestedFor(urlPathEqualTo("/api/public/event"))
+            .withHeader(HttpHeaders.ACCEPT, equalToIgnoreCase(MediaType.APPLICATION_JSON))
+            .withHeader(CfpClient.PORTAL_NAME_HEADER, equalTo("portal1"))
     );
   }
 
@@ -885,7 +830,7 @@ class CfpDevClientTests {
                  "timeSlots": []
                }
             ]
-            """, 200)));
+            """, Status.OK.getStatusCode())));
 
     var talkSearchCriteria = TalkSearchCriteria.builder()
         .speakerCompanies("Red Hat", "Broadcom")
@@ -1161,7 +1106,7 @@ class CfpDevClientTests {
                 }
               ]            
             }
-            """, 200)));
+            """, Status.OK.getStatusCode())));
 
     this.wireMock.register(get(urlPathTemplate("/api/public/search/{searchQuery}"))
         .withPathParam("searchQuery", equalTo("spring"))
@@ -1296,7 +1241,7 @@ class CfpDevClientTests {
                  }
               ]            
             }
-            """, 200)));
+            """, Status.OK.getStatusCode())));
   }
 
   private void verifyFindTalksWithKeywords() {

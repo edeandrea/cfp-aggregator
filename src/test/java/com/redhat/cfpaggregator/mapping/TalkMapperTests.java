@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.OffsetTime;
 import java.util.List;
 
 import jakarta.inject.Inject;
@@ -15,12 +16,43 @@ import io.quarkus.test.junit.QuarkusTest;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevSpeakerDetails;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevTalkDetails;
 import com.redhat.cfpaggregator.client.cfpdev.CfpDevTalkDetails.Keyword;
+import com.redhat.cfpaggregator.client.sessionize.SessionizeSessionDetails;
 import com.redhat.cfpaggregator.domain.Talk;
+import net.datafaker.Faker;
 
 @QuarkusTest
 class TalkMapperTests {
   @Inject
   TalkMapper talkMapper;
+
+  @Test
+  void talkFromSessionize() throws MalformedURLException {
+    var fakeData = new Faker();
+    var talkDetails = new SessionizeSessionDetails(
+        fakeData.idNumber().valid(),
+        fakeData.marketing().buzzwords(),
+        fakeData.company().catchPhrase(),
+        fakeData.timeAndDate().birthday().atTime(OffsetTime.now()),
+        fakeData.timeAndDate().birthday().atTime(OffsetTime.now()),
+        fakeData.collection(() -> fakeData.idNumber().valid()).generate(),
+        new URL(fakeData.internet().url()),
+        new URL(fakeData.internet().url()),
+        "Accepted"
+    );
+
+    var expectedTalk = Talk.builder()
+        .eventTalkId(talkDetails.eventTalkId())
+        .title(talkDetails.title())
+        .description(talkDetails.description())
+        .videoUrl(talkDetails.videoUrl().toString())
+        .build();
+
+    assertThat(this.talkMapper.fromSessionize(talkDetails))
+        .isNotNull()
+        .usingRecursiveComparison()
+        .ignoringFieldsMatchingRegexes(".*hibernate.*")
+        .isEqualTo(expectedTalk);
+  }
 
   @Test
   void talkFromCfpDev() throws MalformedURLException {
@@ -58,6 +90,7 @@ class TalkMapperTests {
     assertThat(this.talkMapper.fromCfpDev(talkDetails))
         .isNotNull()
         .usingRecursiveComparison()
+        .ignoringFieldsMatchingRegexes(".*hibernate.*")
         .isEqualTo(expectedTalk);
   }
 }
