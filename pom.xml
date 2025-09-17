@@ -8,7 +8,7 @@
 	<properties>
 		<assertj.version>3.27.4</assertj.version>
 		<compiler-plugin.version>3.14.0</compiler-plugin.version>
-		<datafaker.version>2.4.4</datafaker.version>
+		<datafaker.version>2.5.0</datafaker.version>
 		<lineawesome.version>2.1.0</lineawesome.version>
 		<mapstruct.version>1.6.3</mapstruct.version>
 		<maven.compiler.release>21</maven.compiler.release>
