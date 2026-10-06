@@ -20,7 +20,7 @@
 		<quarkus.playwright.version>2.3.10</quarkus.playwright.version>
 		<quarkus.wiremock.version>1.8.1</quarkus.wiremock.version>
 		<surefire-plugin.version>3.6.0</surefire-plugin.version>
-		<vaadin.version>25.2.8</vaadin.version>
+		<vaadin.version>25.3.0</vaadin.version>
 	</properties>
 
 	<dependencyManagement>
